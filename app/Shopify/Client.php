@@ -17,6 +17,7 @@ class Client extends BasicShopifyAPI
     private $accesstoken;
 
     const ORDER_SYNC_TAG = "testsync";
+    const ORDER_PROMO_TAG = "PromoOrder";
 
     public function __construct()
     {
@@ -24,7 +25,7 @@ class Client extends BasicShopifyAPI
         $this->cli = new ConsoleCommand();
 
         $options = new Options();
-        $options->setVersion('2020-01');
+        $options->setVersion('2021-10');
         return parent::__construct($options);
     }
 
@@ -433,15 +434,11 @@ class Client extends BasicShopifyAPI
             return $response;
         }
 
-        if ($response->errors) {
+        if ($response['errors']) {
             return $response;
         }
 
-        $responseOrder = json_decode(
-            json_encode($response->body->order),
-            true
-        );
-
+        $responseOrder = $response['body']->container['order'];
         return $responseOrder;
     }
 
@@ -570,14 +567,10 @@ class Client extends BasicShopifyAPI
             return $response;
         }
 
-        if ($response->errors) {
+        if ($response['errors']) {
             return $response;
         }
-
-        $responseOrder = json_decode(
-            json_encode($response->body->order),
-            true
-        );
+        $responseOrder = $response['body']->container['order'];
 
         return $responseOrder;
     }

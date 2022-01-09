@@ -30,7 +30,6 @@ class ShopifyEventServiceProvider extends EventServiceProvider
         'App\Events\Shopify\OrdersCreate' => [
             'App\Listeners\Shopify\SyncOrder'
         ]
-        
 
     ];
 
