@@ -91,7 +91,7 @@ class Orders
             $shopifyOrderId = $attachedOrder['id'];
             $specialpromoQualify = false;
             foreach ($attachedOrder['line_items'] as $line_item) {
-                
+
 /*
  * unnecessary checking of line items
  * /
@@ -274,7 +274,7 @@ class Orders
             }
 
             /*
-             * tagging this order to show the special promo has been applied 
+             * tagging this order to show the special promo has been applied
              */
             $tagsArray = explode(', ', $attachedOrder['tags']);
             $notes = $attachedOrder['note'];
