@@ -23,7 +23,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/Dolibarr/helpers.php"
         ]
     },
     "autoload-dev": {
