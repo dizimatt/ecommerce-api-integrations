@@ -44,6 +44,7 @@ class Tester extends AbstractCommand
         // ----------------------------------------------------------------------
 
         \App\Services\Dolibarr\from\SyncProducts::SyncProducts('4318034854072');
+//        \App\Services\Orders::SyncOrders('4318034854072');
 /*
 //  testing event/listeners for order creations
         $eventClass = "\App\Events\Shopify\\OrdersCreate";

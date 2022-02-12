@@ -14,13 +14,13 @@ if (!function_exists('dolibarr')) {
             }
 
             // Initialise Shopify API Client Singleton
-            $dolibarr = new \App\Dolibarr\Client();
-
-            $dolibarr->setUrl($dolibarr_account->sandbox_url);
-            $dolibarr->setLogin($dolibarr_account->sandbox_login);
-            $dolibarr->setPassword($dolibarr_account->sandbox_password);
-            $dolibarr->setToken($dolibarr_account->sandbox_token);
-
+            $dolibarr = new \App\Dolibarr\Client(
+                $dolibarr_account->sandbox_url,
+                $dolibarr_account->sandbox_login,
+                $dolibarr_account->sandbox_password,
+                $dolibarr_account->sandbox_token,
+                false
+            );
             // Store as a Singleton
             config(['dolibarr' => $dolibarr]);
         }

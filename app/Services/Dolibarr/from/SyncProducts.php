@@ -18,7 +18,6 @@ class SyncProducts
     public static function SyncProducts(int $shopifyOrderId = null, $ignore_tags = false)
     {
 
-        dd(dolibarr()->testDolibarrClient());
         $logger = new Logger('App_Services_OrderSync');
         $loggerFilename = storage_path(
             'logs/App_Services_OrderSync.log'
@@ -27,6 +26,10 @@ class SyncProducts
 
         $isCli = app()->runningInConsole();
         $cli = new ConsoleCommand;
+
+        $cli->line("about to call dolibarr client...");
+
+        dd(dolibarr()->getAllProducts());
 
         $didWeGetOrders = true;
         if (!isset($shopifyOrderId)) {
