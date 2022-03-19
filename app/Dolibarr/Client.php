@@ -127,6 +127,7 @@ class Client //extends BasicShopifyAPI
                 $attribute_values = [];
                 $dolibarr_attribute_values = dolibarr()->getAllValuesForAttribute($message_attribute->id);
                 $message_values_array = json_decode($dolibarr_attribute_values["message"]);
+                if (is_array( $message_values_array )  && count($message_values_array) > 0 )
                 foreach ($message_values_array as $message_value){
                     $value = $message_value->value;
                     if (str_contains($value,"'")){
@@ -136,13 +137,13 @@ class Client //extends BasicShopifyAPI
                     if (str_contains($ref,"'")){
                         $ref = str_replace("'",'',$ref);
                     }
-                    $attribute_values[$value] = [
+                    $attribute_values[$ref] = [
                         "id" => $message_value->id,
                         "ref" => $ref,
                         "value" => $value
                     ];
                 }
-                $attributes[$message_attribute->label] = [
+                $attributes[strtoupper($message_attribute->ref)] = [
                     "id" => $message_attribute->id,
                     "ref" => $message_attribute->ref,
                     "label" => $message_attribute->label,

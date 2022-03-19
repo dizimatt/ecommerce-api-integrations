@@ -50,7 +50,8 @@ class SyncProducts
 
             // search dolibarr for product...
             $cli->line("");
-            $cli->info("searchign dolibarr for ref:" . $shopify_product['handle']);
+            $cli->line("starting...");
+            $cli->info("searching dolibarr for ref:" . $shopify_product['handle']);
             $dolibarr_result = dolibarr()->getProductsByRef($shopify_product['handle']);
             if ($dolibarr_result["success"] == true) {
                 $cli->info("already found this product - will need to update it");
@@ -84,46 +85,64 @@ class SyncProducts
                     }
                     dump($optionNameLookup);
                     foreach ($shopify_product['variants'] as $variant) {
-                        $features_array = [];
-                        for($i=0; $i<=5; $i++){
-                            if (isset($variant['option'.$i]) ){
-                                $feature_name = $optionNameLookup[$i];
-                                echo "feature_name : " . $feature_name . "\n";
+                        $skip_variant = false;
+                        try {
+                            $features_array = [];
+                            for ($i = 0; $i <= 5; $i++) {
+                                if (isset($variant['option' . $i])) {
+                                    $feature_name = strtoupper($optionNameLookup[$i]);
+                                    echo "feature_name : " . $feature_name . "\n";
 
-                                $feature_id = $dolibarr_attributes[$feature_name]['id'];
-                                echo "feature_id : " . $feature_id . "\n";
+                                    if (!isset($dolibarr_attributes[$feature_name])){
+                                        $logger->info("cannot look up attribute name ". $feature_name . " in variant : " .$variant['id']  . ' - product : ' . $variant['product_id']);
+                                        $skip_variant = true;
+                                        continue;
+                                    }
+                                    $feature_id = $dolibarr_attributes[$feature_name]['id'];
+                                    echo "feature_id : " . $feature_id . "\n";
 
-                                $feature_value = $variant['option'.$i];
-                                echo "feature_value : " . $feature_value . "\n";
+                                    $feature_value = strtoupper($variant['option' . $i]);
+                                    echo "feature_value : " . $feature_value . "\n";
 
-                                $feature_value_id = $dolibarr_attributes[$feature_name]['values'][$feature_value]['id'];
-                                echo "feature_value_id : " . $feature_value_id . "\n";
+                                    if (!isset($dolibarr_attributes[$feature_name]['values'][$feature_value])){
+                                        $logger->info("cannot look up attribute value ". $feature_name . " : " . $feature_value . ' in variant : ' .$variant['id']  . ' - product : ' . $variant['product_id']);
+                                        $skip_variant = true;
+                                        continue;
+                                    }
+                                    $feature_value_id = $dolibarr_attributes[$feature_name]['values'][$feature_value]['id'];
+                                    echo "feature_value_id : " . $feature_value_id . "\n";
 
-                                $features_array[$feature_id] = $feature_value_id;
+                                    $features_array[$feature_id] = $feature_value_id;
+                                }
                             }
-                        }
-                        dump($features_array);
-                        $variant_payload = [
-                            'ref' => $variant['sku'],
-                            'variation_price' => ($product_price - $variant['price']),
-                            'variation_price_percentage' => 0,
-                            'entity' => 1,
-                            "combination_price_levels" => null,
-                            "variation_ref_ext" => null,
-                            "weight_impact" => 0,
-                            "price_impact" => 0,
-                            "price_impact_is_percent" => 0,
-                            "features" => $features_array
-                        ];
-                        dump($variant_payload);
+                            if ($skip_variant){
+                                continue;
+                            }
+                            dump($features_array);
+                            $variant_payload = [
+                                'ref' => $variant['sku'],
+                                'variation_price' => ($product_price - $variant['price']),
+                                'variation_price_percentage' => 0,
+                                'entity' => 1,
+                                "combination_price_levels" => null,
+                                "variation_ref_ext" => null,
+                                "weight_impact" => 0,
+                                "price_impact" => 0,
+                                "price_impact_is_percent" => 0,
+                                "features" => $features_array
+                            ];
+                            dump($variant_payload);
 
-                        $dolibarr_variant_result = dolibarr()->createVariant($_dolibarr_product_id,$variant_payload);
-                        if ($dolibarr_variant_result['success'] == true) {
-                            $cli->info("created variant in dolibarr - variant id: ". $dolibarr_variant_result['message']);
-                        } else {
-                            dump($dolibarr_variant_result);
-                        }
+                            $dolibarr_variant_result = dolibarr()->createVariant($_dolibarr_product_id, $variant_payload);
+                            if ($dolibarr_variant_result['success'] == true) {
+                                $cli->info("created variant in dolibarr - variant id: " . $dolibarr_variant_result['message']);
+                            } else {
+                                dump($dolibarr_variant_result);
+                            }
 
+                        } catch (\Exception $e) {
+                            $logger->error("error when attmepting to import product variant : " . $variant['id']  . ' - product : ' . $variant['product_id'] . ' - message: '. $e->getMessage());
+                        }
                     }
                 }
             }
