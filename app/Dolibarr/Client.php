@@ -55,8 +55,20 @@ class Client //extends BasicShopifyAPI
         //return parent::__construct($options);
     }
 
-    public function getProducts(){
+    public function getProductsByRef($ref){
+        $uri = "/Products";
+        $response = $this->request('GET', $this->url . $uri, [
+            'query' => "sqlfilters=ref='". $ref ."'"
+        ]);
+        return $response;
 
+    }
+    public function getProduct($productId){
+        $uri = "/Products/{$productId}";
+        $response = $this->request('GET', $this->url . $uri, [
+            'query' => []
+        ]);
+        return $response;
     }
     public function testDolibarrClient(){
         return [
@@ -71,7 +83,7 @@ class Client //extends BasicShopifyAPI
 
     public function getAllProducts()
     {
-        dump($this->testDolibarrClient());
+//        dump($this->testDolibarrClient());
 
         $uri = '/Products/';
 //"http://192.168.1.6/api/index.php" .
@@ -81,9 +93,24 @@ class Client //extends BasicShopifyAPI
         return $response;
     }
 
+    public function createProduct(array $payload){
+        $uri = '/Products';
+        $response = $this->request('POST', $this->url . $uri, [
+            "body" => json_encode($payload)
+        ]);
+        return $response;
+    }
+    public function createVariant($product_id, array $payload){
+        $uri = "/Products/{$product_id}/variants";
+        $response = $this->request('POST', $this->url . $uri, [
+            "body" => json_encode($payload)
+        ]);
+        return $response;
+    }
+
     protected function request(string $method, string $uri, array $data = [])
     {
-        dump(["data" => $data]);
+//        dump(["data" => $data]);
         $result = [];
 
         try {

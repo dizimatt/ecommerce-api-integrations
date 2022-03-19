@@ -29,7 +29,8 @@ class SyncProducts
 
         $cli->line("about to call dolibarr client...");
 
-        dd(dolibarr()->getAllProducts());
+        dd(["dolibarr" => dolibarr()->getAllProducts(),
+            "shopify" => shopify()->getAllProducts()]);
 
         $didWeGetOrders = true;
         if (!isset($shopifyOrderId)) {

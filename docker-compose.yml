@@ -6,7 +6,7 @@ networks:
 services:
   nginx:
     image: nginx:stable-alpine
-    container_name: NGINX
+    container_name: or-NGINX
     ports:
       - "8080:80"
     volumes:
@@ -19,9 +19,9 @@ services:
 
   mariaDB:
     image: mariadb:latest
-    container_name: MYSQL
+    container_name: or-MYSQL
     volumes:
-      - ./database:/var/lib/mysql:rw
+      - ./docker/database:/var/lib/mysql:rw
     ports:
       - "3306:3306"
     depends_on:
@@ -33,11 +33,11 @@ services:
 
   php:
     image: php:7.4-fpm-alpine
-    container_name: PHP
+    container_name: or-PHP
     volumes:
       - ./:/code
     ports:
-      - "9100:9000"
+      - "9000:9000"
     networks:
       - LEMP
     build:
@@ -46,7 +46,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: PHPMYADMIN
+    container_name: or-PHPMYADMIN
     ports:
       - "8183:80"
     environment:

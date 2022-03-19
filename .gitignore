@@ -4,7 +4,6 @@ Homestead.json
 Homestead.yaml
 .env
 .phpunit.result.cache
-/storage
 /database/aria_log.00000001
 /database/aria_log_control
 /database/ddl_recovery.log

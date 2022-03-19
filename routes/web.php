@@ -42,7 +42,7 @@ $router->group(['middleware' => ['shopify-admin-auth']], function () use ($route
     });
 */
 });
-// Webhook URL's for Shopify Webhook Notifications
+// Webhook URLs for Shopify Webhook Notifications
 $router->group([
     'prefix' => '/webhook',
     'namespace' => 'Webhook',
