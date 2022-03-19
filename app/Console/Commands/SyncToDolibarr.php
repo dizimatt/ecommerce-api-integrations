@@ -44,7 +44,7 @@ class SyncToDolibarr extends AbstractCommand
         // Test code here
         // ----------------------------------------------------------------------
 
-        \App\Services\Dolibarr\to\SyncProducts::execute('6632857862328');
+        \App\Services\Dolibarr\to\SyncProducts::execute('3885567705185');
 //        \App\Services\Dolibarr\to\SyncProducts::execute();
         return;
     }

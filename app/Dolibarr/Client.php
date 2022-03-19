@@ -107,6 +107,43 @@ class Client //extends BasicShopifyAPI
         ]);
         return $response;
     }
+    public function getAllAttributes(){
+        $uri = "/products/attributes";
+        $response = $this->request('GET', $this->url . $uri, []);
+        return $response;
+    }
+    public function getAllValuesForAttribute(int $id){
+        $uri = "/products/attributes/{$id}/values";
+        $response = $this->request('GET', $this->url . $uri, []);
+        return $response;
+    }
+
+    public function fetchAllDolibarrVariantAttributes(){
+        $attributes = [];
+        $dolibarr_attributes = dolibarr()->getAllAttributes();
+        if ($dolibarr_attributes["success"]) {
+            $message_attributes_array = json_decode($dolibarr_attributes["message"]);
+            foreach($message_attributes_array as $message_attribute){
+                $attribute_values = [];
+                $dolibarr_attribute_values = dolibarr()->getAllValuesForAttribute($message_attribute->id);
+                $message_values_array = json_decode($dolibarr_attribute_values["message"]);
+                foreach ($message_values_array as $message_value){
+                    $attribute_values[$message_value->value] = [
+                        "id" => $message_value->id,
+                        "ref" => $message_value->ref,
+                        "value" => $message_value->value
+                    ];
+                }
+                $attributes[$message_attribute->label] = [
+                    "id" => $message_attribute->id,
+                    "ref" => $message_attribute->ref,
+                    "label" => $message_attribute->label,
+                    "values" => $attribute_values
+                ];
+            }
+        }
+        return $attributes;
+    }
 
     protected function request(string $method, string $uri, array $data = [])
     {

@@ -29,6 +29,8 @@ class SyncProducts
             $filter["ids"] = $shopifyProductId;
         }
         //dd($filter);
+        $dolibarr_attributes = dolibarr()->fetchAllDolibarrVariantAttributes();
+        dd($dolibarr_attributes);
         $shopify_products = shopify()->getAllProducts($filter);
         dump($shopify_products);
         foreach($shopify_products as $shopify_product){
@@ -106,4 +108,5 @@ class SyncProducts
             "shopify" => shopify()->getAllProducts($filter)]);
         */
     }
+
 }
