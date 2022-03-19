@@ -30,9 +30,9 @@ class SyncProducts
         }
         //dd($filter);
         $dolibarr_attributes = dolibarr()->fetchAllDolibarrVariantAttributes();
-        dd($dolibarr_attributes);
+        dump($dolibarr_attributes);
         $shopify_products = shopify()->getAllProducts($filter);
-        dump($shopify_products);
+        //dump($shopify_products);
         foreach($shopify_products as $shopify_product){
             $_dolibarr_product_id = null;
 
@@ -78,8 +78,32 @@ class SyncProducts
             }
             if ($_dolibarr_product_id != null){
                 if (isset($shopify_product['variants']) && count($shopify_product['variants']) != 0) {
+                    $optionNameLookup = [];
+                    foreach ($shopify_product['options'] as $option){
+                        $optionNameLookup[$option['position']] = $option['name'];
+                    }
+                    dump($optionNameLookup);
                     foreach ($shopify_product['variants'] as $variant) {
-                        $dolibarr_variant_result = dolibarr()->createVariant($_dolibarr_product_id,[
+                        $features_array = [];
+                        for($i=0; $i<=5; $i++){
+                            if (isset($variant['option'.$i]) ){
+                                $feature_name = $optionNameLookup[$i];
+                                echo "feature_name : " . $feature_name . "\n";
+
+                                $feature_id = $dolibarr_attributes[$feature_name]['id'];
+                                echo "feature_id : " . $feature_id . "\n";
+
+                                $feature_value = $variant['option'.$i];
+                                echo "feature_value : " . $feature_value . "\n";
+
+                                $feature_value_id = $dolibarr_attributes[$feature_name]['values'][$feature_value]['id'];
+                                echo "feature_value_id : " . $feature_value_id . "\n";
+
+                                $features_array[$feature_id] = $feature_value_id;
+                            }
+                        }
+                        dump($features_array);
+                        $variant_payload = [
                             'ref' => $variant['sku'],
                             'variation_price' => ($product_price - $variant['price']),
                             'variation_price_percentage' => 0,
@@ -89,16 +113,17 @@ class SyncProducts
                             "weight_impact" => 0,
                             "price_impact" => 0,
                             "price_impact_is_percent" => 0,
-                            "features" => [
-                                "1" => "3",
-                                "2" => "11"
-                            ]
-                        ]);
+                            "features" => $features_array
+                        ];
+                        dump($variant_payload);
+
+                        $dolibarr_variant_result = dolibarr()->createVariant($_dolibarr_product_id,$variant_payload);
                         if ($dolibarr_variant_result['success'] == true) {
                             $cli->info("created variant in dolibarr - variant id: ". $dolibarr_variant_result['message']);
                         } else {
                             dump($dolibarr_variant_result);
                         }
+
                     }
                 }
             }
