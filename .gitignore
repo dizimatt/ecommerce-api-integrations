@@ -13,3 +13,4 @@ Homestead.yaml
 /database/ibdata1
 /database/ibtmp1
 /database/multi-master.info
+/storage
