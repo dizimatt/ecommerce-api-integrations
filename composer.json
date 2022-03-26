@@ -24,7 +24,8 @@
         },
         "files": [
             "app/helpers.php",
-            "app/Dolibarr/helpers.php"
+            "app/Dolibarr/helpers.php",
+            "app/Shopify/helpers.php"
         ]
     },
     "autoload-dev": {
