@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Dolibarr\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

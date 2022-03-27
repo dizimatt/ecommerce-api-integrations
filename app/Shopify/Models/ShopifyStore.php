@@ -1,15 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Shopify\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use function env;
 
-class Store extends Model
+class ShopifyStore extends Model
 {
     private $_nonceLife;
     private $_nonceSalt;
 
+    protected $table = "shopify_stores";
     public function __construct()
     {
         $this->_nonceLife = env('SHOPIFY_NONCE_LIFE');

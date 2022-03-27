@@ -2,11 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
+use App\Shopify\Models\StoreAppKey;
 use App\Store;
-use App\DB\StoreAppKey;
-
-use Monolog\Handler\StreamHandler;
+use Closure;
 
 class ShopifyWebhookAuthenticate
 {

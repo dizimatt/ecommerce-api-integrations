@@ -1,20 +1,5 @@
 <?php
 
-if (!function_exists('stores')) {
-    function stores()
-    {
-        $key_store_data = \App\DB\StoreAppKey::get();
-        $data = array();
-
-        $i = 0;
-        foreach ($key_store_data as $store) {
-            $data[$store['store_name']] = array('key' => $store['store_api_key'], 'secret' => $store['store_api_secret']);
-            $i++;
-        }
-
-        return $data;
-    }
-}
     if (!function_exists('session')) {
         /**
          * Get / set the specified session value.
@@ -63,28 +48,6 @@ if (!function_exists('getQueryParams')) {
     }
 }
 
-if (!function_exists('authoriseStore')) {
-    function authoriseStore(int $storeId)
-    {
-        try {
-            $store = \App\Store::findOrFail($storeId);
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        config([
-            'authorised' => true,
-            'store_id' => $store->id
-        ]);
-
-        // A store has been authorised, ensure all singletons are reset
-        config(['store' => false]);
-        config(['shopify' => false]);
-        config(['ap21' => false]);
-
-        return true;
-    }
-}
 
 if (! function_exists('config')) {
     /**
@@ -117,43 +80,3 @@ if (!function_exists('isAuthorised')) {
     }
 }
 
-if (!function_exists('store')) {
-    function store()
-    {
-        if (!isAuthorised()) {
-            return false;
-        }
-
-        // Fetch from Singleton
-        $store = config('store', false);
-
-        if (!$store) {
-            // Initialise Current Store Singleton
-            try {
-                $store = \App\Store::findOrFail(config('store_id', false));
-            } catch (\Exception $e) {
-                return false;
-            }
-
-            // Store as a Singleton
-            config(['store' => $store]);
-        }
-
-        return $store;
-    }
-}
-
-
-if (!function_exists('setShopifyTopics')) {
-    function setShopifyTopics(array $shopifyTopics)
-    {
-        config(['shopify_topics' => $shopifyTopics]);
-    }
-}
-
-if (!function_exists('getShopifyTopics')) {
-    function getShopifyTopics()
-    {
-        return config('shopify_topics', false);
-    }
-}

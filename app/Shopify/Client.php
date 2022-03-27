@@ -328,11 +328,11 @@ class Client extends BasicShopifyAPI
             return $response;
         }
 
-        if ($response->errors) {
+        if ($response["errors"]) {
             return $response;
         }
 
-        return $response->body->products;
+        return $response;
     }
 
     public function getProductCount(array $filter = [], bool $getFullResponse = false)
@@ -1061,7 +1061,7 @@ class Client extends BasicShopifyAPI
         if ($response['errors']) {
             return $response;
         }
-        
+
         $responseWebhook = $response['body']->container['webhook'];
 
         return $responseWebhook;

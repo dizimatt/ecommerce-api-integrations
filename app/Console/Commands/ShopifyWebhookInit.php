@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Console\AbstractCommand;
+use App\Shopify\Console\AbstractCommand;
 
 use App\Services\WebhookInit;
 

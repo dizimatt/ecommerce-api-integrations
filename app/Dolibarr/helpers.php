@@ -8,7 +8,7 @@ if (!function_exists('dolibarr')) {
         if (!$dolibarr) {
             // Initialise Current Store Singleton
             try {
-                $dolibarr_account = \App\DolibarrAccount::findOrFail(store()->id);
+                $dolibarr_account = \App\Dolibarr\Models\DolibarrAccount::findOrFail(store()->id);
             } catch (\Exception $e) {
                 return false;
             }

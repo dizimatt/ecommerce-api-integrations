@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Console\AbstractCommand;
+use App\Shopify\Console\AbstractCommand;
 
 class Tester extends AbstractCommand
 {
@@ -44,6 +44,10 @@ class Tester extends AbstractCommand
         // ----------------------------------------------------------------------
 
         echo "\n\n";
+
+
+        $dolibarr_attributes = dolibarr()->fetchAllDolibarrVariantAttributes();
+        dd($dolibarr_attributes);
 
         $time_end = microtime(true);
         $execution_time = $time_end - $time_start;

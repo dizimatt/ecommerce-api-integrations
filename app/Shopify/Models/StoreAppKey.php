@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DB;
+namespace App\Shopify\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\DB\BaseModel;
 
 class StoreAppKey extends BaseModel
 {
