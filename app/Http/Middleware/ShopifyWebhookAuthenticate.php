@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Shopify\Models\StoreAppKey;
-use App\Store;
+use App\Shopify\Models\ShopifyStore;
 use Closure;
 
 class ShopifyWebhookAuthenticate
@@ -126,7 +126,7 @@ class ShopifyWebhookAuthenticate
 
         $shopifyHostname = $requestHeaders['x-shopify-shop-domain'][0];
 
-        $store = Store::where('hostname', $shopifyHostname)->first();
+        $store = ShopifyStore::where('hostname', $shopifyHostname)->first();
         if (!isset($store)) {
             $response = [];
 

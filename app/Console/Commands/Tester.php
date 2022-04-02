@@ -45,10 +45,19 @@ class Tester extends AbstractCommand
 
         echo "\n\n";
 
+        wordpress()->donothing();
 
-        $dolibarr_attributes = dolibarr()->fetchAllDolibarrVariantAttributes();
-        dd($dolibarr_attributes);
+//        $dolibarr_attributes = dolibarr()->fetchAllDolibarrVariantAttributes();
+//        dump($dolibarr_attributes);
 
+/*        $products = shopify()->getAllProducts();
+        if (is_array($products)) {
+            dump(["count" => count($products),
+                "first product" => $products[0]]);
+        } else {
+            dump(["products fetch result" => $products]);
+        }
+        */
         $time_end = microtime(true);
         $execution_time = $time_end - $time_start;
 

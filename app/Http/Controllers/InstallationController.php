@@ -7,7 +7,7 @@ use GuzzleHttp\RequestOptions as GuzzleRequestOptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-use App\Store;
+use App\Shopify\Models\ShopifyStore;
 
 
 class InstallationController extends Controller
@@ -63,7 +63,7 @@ class InstallationController extends Controller
         }
 
         // Check if the store is already in the system
-        $store = Store::where('domain', $request->shop)->first();
+        $store = ShopifyStore::where('domain', $request->shop)->first();
 
         // Prepare the store for installation
         if (!isset($store)) {
@@ -89,7 +89,7 @@ class InstallationController extends Controller
             'state' => $store->nonce
         ];
         $queryString = urldecode(http_build_query($queryParams));
-        
+
         // Reset any Session data and set the installation Store to session
         session()->flush();
         session(['installation_store_id' => $store->id]);
@@ -133,7 +133,7 @@ class InstallationController extends Controller
         }
 
         // Find the store for this validation
-        $store = Store::find($storeId);
+        $store = ShopifyStore::find($storeId);
         if (!isset($store)) {
             $response = [];
 
