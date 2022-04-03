@@ -83,14 +83,16 @@ class Client //extends BasicShopifyAPI
 
     public function getAllProducts()
     {
-//        dump($this->testDolibarrClient());
 
         $uri = '/Products/';
-//"http://192.168.1.6/api/index.php" .
         $response = $this->request('GET', $this->url . $uri, [
             'query' => []
         ]);
-        return $response;
+        if ($response['success'] === true) {
+            return (json_decode($response['message'], true));
+        } else {
+            return [];
+        }
     }
 
     public function createProduct(array $payload){

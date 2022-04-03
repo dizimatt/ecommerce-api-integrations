@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Shopify\Console\AbstractCommand;
 
-class Tester extends AbstractCommand
+class SyncToWordpress extends AbstractCommand
 {
     const PROGRESS_BAR_FORMAT = 'debug';
 
@@ -13,8 +13,9 @@ class Tester extends AbstractCommand
      *
      * @var string
      */
-    protected $signature = 'app:test
-                                {store_id : The integrations Store ID for the Shopify Store}';
+    protected $signature = 'wordpress:to:syncproducts
+                                {store_id : The integrations Store ID for the Shopify Store}
+                                {product_id? : The integrations Store ID for the Shopify Store}';
 
     /**
      * The console command description.
@@ -36,23 +37,15 @@ class Tester extends AbstractCommand
         parent::handle();
 
         echo "\n\n";
-        $this->info('Tester::handle() EXECUTED');
+        $this->info('SyncToWordpress::handle() EXECUTED');
         echo "\n";
 
         // ----------------------------------------------------------------------
         // Test code here
         // ----------------------------------------------------------------------
 
-        echo "\n\n";
-
-
-        $time_end = microtime(true);
-        $execution_time = $time_end - $time_start;
-
-        $this->info("Tester::handle() COMPLETED in {$execution_time}");
-
-        echo "\n\n";
-
+//        \App\Services\Dolibarr\to\SyncProducts::execute('3885567705185');
+        \App\Services\Wordpress\to\SyncProducts::execute();
         return;
     }
 }

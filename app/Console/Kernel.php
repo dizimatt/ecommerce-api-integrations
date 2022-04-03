@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\Tester',
         'App\Console\Commands\SyncToDolibarr',
+        'App\Console\Commands\SyncToWordpress',
         'App\Console\Commands\ShopifyWebhookInit'
     ];
 

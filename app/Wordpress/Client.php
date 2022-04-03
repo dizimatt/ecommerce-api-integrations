@@ -7,6 +7,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\RequestOptions;
 
 use App\Console\ConsoleCommand;
 
@@ -68,100 +69,30 @@ class Client
     public function getAllProducts(){
 //        $response = $this->_httpClient->get($this->url . "/products");
         $response = $this->request("GET", $this->url . "/products");
-        return $response;
+        if ($response['success'] === true){
+            return json_decode($response['message'],true);
+        } else {
+            return [];
+        }
+    }
+    public function createProduct(array $payload){
+        $response = $this->post($this->url . "/products", $payload);
+        if ($response['success'] === true){
+            return json_decode($response['message'],true);
+        } else {
+            return [];
+        }
     }
     public function getAllEndpoints(){
-//        $response = $this->_httpClient->get($this->url . "/products");
         $response = $this->request("GET", $this->url);
-        return $response;
-    }
-
-    public function getProductsByRef($ref){
-        $uri = "/Products";
-        $response = $this->request('GET', $this->url . $uri, [
-            'query' => "sqlfilters=ref='". $ref ."'"
-        ]);
-        return $response;
-
-    }
-    public function getProduct($productId){
-        $uri = "/Products/{$productId}";
-        $response = $this->request('GET', $this->url . $uri, [
-            'query' => []
-        ]);
-        return $response;
-    }
-    public function testDolibarrClient(){
-        return [
-            "dolibarr" => [
-                "url" => $this->url,
-                "login" => $this->login,
-                "password" => $this->password,
-                "token" => $this->token
-            ]
-        ];
-    }
-
-    public function createProduct(array $payload){
-        $uri = '/Products';
-        $response = $this->request('POST', $this->url . $uri, [
-            "body" => json_encode($payload)
-        ]);
-        return $response;
-    }
-    public function createVariant($product_id, array $payload){
-        $uri = "/Products/{$product_id}/variants";
-        $response = $this->request('POST', $this->url . $uri, [
-            "body" => json_encode($payload)
-        ]);
-        return $response;
-    }
-    public function getAllAttributes(){
-        $uri = "/products/attributes";
-        $response = $this->request('GET', $this->url . $uri, []);
-        return $response;
-    }
-    public function getAllValuesForAttribute(int $id){
-        $uri = "/products/attributes/{$id}/values";
-        $response = $this->request('GET', $this->url . $uri, []);
-        return $response;
-    }
-
-    public function fetchAllDolibarrVariantAttributes(){
-        $attributes = [];
-        $dolibarr_attributes = dolibarr()->getAllAttributes();
-        if ($dolibarr_attributes["success"]) {
-            $message_attributes_array = json_decode($dolibarr_attributes["message"]);
-            foreach($message_attributes_array as $message_attribute){
-                $attribute_values = [];
-                $dolibarr_attribute_values = dolibarr()->getAllValuesForAttribute($message_attribute->id);
-                $message_values_array = json_decode($dolibarr_attribute_values["message"]);
-                if (is_array( $message_values_array )  && count($message_values_array) > 0 )
-                foreach ($message_values_array as $message_value){
-                    $value = $message_value->value;
-                    if (str_contains($value,"'")){
-                        $value = str_replace("'",'',$value);
-                    }
-                    $ref = $message_value->ref;
-                    if (str_contains($ref,"'")){
-                        $ref = str_replace("'",'',$ref);
-                    }
-                    $attribute_values[$ref] = [
-                        "id" => $message_value->id,
-                        "ref" => $ref,
-                        "value" => $value
-                    ];
-                }
-                $attributes[strtoupper($message_attribute->ref)] = [
-                    "id" => $message_attribute->id,
-                    "ref" => $message_attribute->ref,
-                    "label" => $message_attribute->label,
-                    "values" => $attribute_values
-                ];
-            }
+        if ($response['success'] === true) {
+            return json_decode($response['message'], true);
+        } else {
+            return [];
         }
-        return $attributes;
+        return $response;
     }
+
 
     protected function request(string $method, string $uri, array $data = [])
     {
@@ -210,4 +141,52 @@ class Client
         return $result;
     }
 
+    protected function post(string $uri, array $data = [])
+    {
+//        dump(["data" => $data]);
+        $result = [];
+
+        try {
+            $response = $this->_httpClient->post($uri, [
+                RequestOptions::JSON => $data
+            ]);
+
+        } catch (RequestException $e) {
+
+            if ($e->hasResponse()) {
+                $errorResponse = $e->getResponse();
+
+                $result['success'] = false;
+                $result['status_code'] = $errorResponse->getStatusCode();
+                $result['message'] = $errorResponse->getReasonPhrase();
+            } else {
+                $result['success'] = false;
+                $result['status_code'] = $e->getCode();
+                $result['message'] = $e->getMessage();
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+
+            $result['success'] = false;
+            $result['status_code'] = $e->getCode();
+            $result['message'] = $e->getMessage();
+
+            return $result;
+        }
+
+        if ((200 <= $response->getStatusCode()) && $response->getStatusCode() < 300) {
+            $result['success'] = true;
+            $result['status_code'] = $response->getStatusCode();
+            $result['headers'] = $response->getHeaders();
+            $result['message'] = $response->getBody()->getContents();
+        } else {
+            $result['success'] = false;
+            $result['status_code'] = $response->getStatusCode();
+            $result['headers'] = $response->getHeaders();
+            $result['message'] = $response->getReasonPhrase();
+        }
+
+        return $result;
+    }
 }
