@@ -45,7 +45,10 @@ class Tester extends AbstractCommand
 
         echo "\n\n";
 
-        wordpress()->donothing();
+        $allProducts = wordpress()->getAllProducts();
+        echo("all_products: \n" . json_encode(json_decode($allProducts['message']),JSON_PRETTY_PRINT));
+//        $allEndpoints = wordpress()->getAllEndpoints();
+//        echo ("all endpoints:\n" . json_encode(json_decode($allEndpoints['message']),JSON_PRETTY_PRINT));
 
 //        $dolibarr_attributes = dolibarr()->fetchAllDolibarrVariantAttributes();
 //        dump($dolibarr_attributes);

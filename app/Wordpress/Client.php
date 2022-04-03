@@ -49,22 +49,15 @@ class Client
         $handler = new CurlHandler();
         $stack = HandlerStack::create($handler);
 
-        dump([
-            'consumer_key' => $this->key,
-            'consumer_secret' => $this->secret,
-            'token_secret' => '',
-            'token' => ''
-        ]);
         $oauth = new Oauth1([
             'consumer_key' => $this->key,
             'consumer_secret' => $this->secret,
             'token' => '',
             'token_secret' => '',
-            'request_method' => Oauth1::REQUEST_METHOD_QUERY,
+            'request_method' => Oauth1::REQUEST_METHOD_HEADER, //REQUEST_METHOD_QUERY,
             'signature_method' => Oauth1::SIGNATURE_METHOD_HMAC
         ]);
         $stack->push($oauth);
-
         $this->_httpClient = new httpClient([
             'base_uri' => $this->url,
             'handler' => $stack,
@@ -72,13 +65,17 @@ class Client
         ]);
     }
 
-    public function donothing(){
-        $response = $this->_httpClient->get("products");
-//        $response = $this->request("GET", $this->url . "products", ['auth' => 'oauth']);
-        dump (["store_id" => store()->id,
-            "response" => $response]);
-        return true;
+    public function getAllProducts(){
+//        $response = $this->_httpClient->get($this->url . "/products");
+        $response = $this->request("GET", $this->url . "/products");
+        return $response;
     }
+    public function getAllEndpoints(){
+//        $response = $this->_httpClient->get($this->url . "/products");
+        $response = $this->request("GET", $this->url);
+        return $response;
+    }
+
     public function getProductsByRef($ref){
         $uri = "/Products";
         $response = $this->request('GET', $this->url . $uri, [
@@ -103,18 +100,6 @@ class Client
                 "token" => $this->token
             ]
         ];
-    }
-
-    public function getAllProducts()
-    {
-//        dump($this->testDolibarrClient());
-
-        $uri = '/Products/';
-//"http://192.168.1.6/api/index.php" .
-        $response = $this->request('GET', $this->url . $uri, [
-            'query' => []
-        ]);
-        return $response;
     }
 
     public function createProduct(array $payload){
