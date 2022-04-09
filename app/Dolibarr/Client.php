@@ -68,7 +68,11 @@ class Client //extends BasicShopifyAPI
         $response = $this->request('GET', $this->url . $uri, [
             'query' => []
         ]);
-        return $response;
+        if ($response['success'] === true) {
+            return (json_decode($response['message'], true));
+        } else {
+            return [];
+        }
     }
     public function testDolibarrClient(){
         return [

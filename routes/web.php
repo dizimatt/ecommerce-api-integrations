@@ -26,6 +26,17 @@ $router->get('/install', [
     'as' => 'app-install'
 ]);
 
+$router->group([
+    'prefix' => '/products',
+    'namespace' => 'Products',
+    'middleware' => ['open-auth']
+], function() use ($router){
+    $router->get('/getallproducts', [
+        'uses' => 'ProductsController@getAllProducts',
+        'as' => 'admin-products-getall'
+    ]);
+});
+
 // Authenticated section of the app
 $router->group(['middleware' => ['shopify-admin-auth']], function () use ($router) {
     // Installation validation controller

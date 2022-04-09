@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Store;
+use App\Shopify\Models\ShopifyStore as Store;
 
 class OpenAuthenticate
 {
@@ -57,6 +57,14 @@ class OpenAuthenticate
         ]);
         authoriseStore($store->id);
 
+        /*
+        return response()->json([
+            "success" => true,
+            "shop" => $getData['shop'],
+            "next" => $next,
+            "request" => $request
+        ]);
+        */
         return $next($request);
     }
 }

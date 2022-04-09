@@ -45,6 +45,10 @@ class Tester extends AbstractCommand
 
         echo "\n\n";
 
+//        $product = shopify()->getAllProducts(["ids" => "6632857895096"]);
+//        $product = shopify()->getProduct("6632857895096");
+        $dolibarr_product = dolibarr()->getProduct(3469);
+        dump($dolibarr_product);
 
         $time_end = microtime(true);
         $execution_time = $time_end - $time_start;

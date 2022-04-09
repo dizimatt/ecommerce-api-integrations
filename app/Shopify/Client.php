@@ -332,7 +332,12 @@ class Client extends BasicShopifyAPI
             return $response;
         }
 
-        return $response;
+        $responseProducts = json_decode(
+            json_encode($response->body),
+            true
+        );
+
+        return $responseProducts;
     }
 
     public function getProductCount(array $filter = [], bool $getFullResponse = false)
