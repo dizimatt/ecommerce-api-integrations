@@ -69,7 +69,7 @@ class InstallationController extends Controller
         if (!isset($store)) {
             // Setup a new store instance.
             // We set the Hostname and Domain to the same value as we may not know the correct Hostname at this stage
-            $store = new Store;
+            $store = new ShopifyStore;
             $store->domain = $store->hostname = $request->shop;
             $store->save();
         } else {
@@ -92,7 +92,7 @@ class InstallationController extends Controller
 
         // Reset any Session data and set the installation Store to session
         session()->flush();
-        session(['installation_store_id' => $store->id]);
+        session(['store_id' => $store->id]);
 
         $redirectUrl = $this->_httpProtocol . $store->domain . $this->_authUri . '?' . $queryString;
 //        dd($redirectUrl);

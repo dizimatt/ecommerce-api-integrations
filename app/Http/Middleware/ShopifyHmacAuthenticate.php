@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Shopify\Models\ShopifyStore;
 use Closure;
-use App\Store;
 
 class ShopifyHmacAuthenticate
 {
@@ -133,7 +133,7 @@ class ShopifyHmacAuthenticate
             $storeId = session('installation_store_id', false);
             if ($storeId === false) {
                 // Get the Store for the validated request
-                $store = Store::where('hostname', $getData['shop'])->first();
+                $store = ShopifyStore::where('hostname', $getData['shop'])->first();
                 if (!isset($store)) {
                     $response = [];
 

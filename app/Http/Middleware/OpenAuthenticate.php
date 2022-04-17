@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Shopify\Models\ShopifyStore;
 use Closure;
-use App\Shopify\Models\ShopifyStore as Store;
 
 class OpenAuthenticate
 {
@@ -37,7 +37,7 @@ class OpenAuthenticate
         }
 
         try {
-            $store = Store::where('hostname', $getData['shop'])->firstOrFail();
+            $store = ShopifyStore::where('hostname', $getData['shop'])->firstOrFail();
         } catch (\Exception $e) {
             $response = [];
 
