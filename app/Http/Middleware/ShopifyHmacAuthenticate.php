@@ -23,8 +23,7 @@ class ShopifyHmacAuthenticate
      */
     public function handle($request, Closure $next)
     {
-        $isAuthorised = session('authorised', false);
-
+        $isAuthorised = session('admin_authorised', false);
         if (!$isAuthorised) {
             // Ensure that authentication params are set
             if ($queryString = $request->getQueryString()) {
@@ -151,7 +150,7 @@ class ShopifyHmacAuthenticate
 
             // The user is now Authorized
             session([
-                'authorised' => true,
+                'admin_authorised' => true,
                 'store_id' => $storeId
             ]);
             authoriseStore($storeId);

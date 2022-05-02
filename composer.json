@@ -27,7 +27,8 @@
             "app/helpers.php",
             "app/Dolibarr/helpers.php",
             "app/Shopify/helpers.php",
-            "app/Wordpress/helpers.php"
+            "app/Wordpress/helpers.php",
+            "app/BigCommerce/helpers.php"
         ]
     },
     "autoload-dev": {

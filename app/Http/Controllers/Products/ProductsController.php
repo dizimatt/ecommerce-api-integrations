@@ -27,8 +27,8 @@ class ProductsController extends BaseController
             return response()->json($response, $errorCode);
         }
         */
-        $products = shopify()->getAllProducts(["ids" => "6632857895096"]);
-        $dolibarr_product = dolibarr()->getProduct(3469);
+        $products = shopify()->getAllProducts(); //["ids" => "6632857895096"]);
+        $dolibarr_product = dolibarr()->getAllProducts(); //getProduct(3469);
         return response()->json([
             "success" => true,
             "products" => $products,

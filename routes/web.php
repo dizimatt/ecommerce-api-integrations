@@ -13,9 +13,18 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return "<h1>Welcome to Open Resourcing Shopify!</h1>";
+$router->group([
+    'prefix' => '/',
+    'middleware' => ['open-auth'] //shopify-admin-auth
+], function() use ($router) {
+
+    $router->get('/', [
+        'uses' => 'IndexController@index',
+        'as' => 'app-index'
+    ]);
+
 });
+
 // Request Acknowledgment URL for uptime checks
 $router->get('/ping', function () {
     return response()->json(['ack' => time()]);
@@ -29,7 +38,7 @@ $router->get('/install', [
 $router->group([
     'prefix' => '/products',
     'namespace' => 'Products',
-    'middleware' => ['open-auth']
+    'middleware' => ['open-auth'] //shopify-admin-auth
 ], function() use ($router){
     $router->get('/getallproducts', [
         'uses' => 'ProductsController@getAllProducts',
