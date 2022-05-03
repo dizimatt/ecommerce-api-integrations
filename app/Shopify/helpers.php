@@ -60,27 +60,6 @@ if (!function_exists('shopify')) {
             return $store;
         }
     }
-    if (!function_exists('authoriseStore')) {
-        function authoriseStore(int $storeId)
-        {
-            try {
-                $store = \App\Shopify\Models\ShopifyStore::findOrFail($storeId);
-            } catch (\Exception $e) {
-                return false;
-            }
-
-            config([
-                'authorised' => true,
-                'store_id' => $store->id
-            ]);
-
-            // A store has been authorised, ensure all singletons are reset
-            config(['store' => false]);
-            config(['shopify' => false]);
-
-            return true;
-        }
-    }
 
 
     if (!function_exists('setShopifyTopics')) {

@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Shopify\Console\AbstractCommand;
+use App\Console\StoreAbstractCommand;
 use function PHPUnit\Framework\isNull;
 
-class Tester extends AbstractCommand
+class Tester extends StoreAbstractCommand
 {
     const PROGRESS_BAR_FORMAT = 'debug';
 

@@ -80,3 +80,28 @@ if (!function_exists('isAuthorised')) {
     }
 }
 
+if (!function_exists('authoriseStore')) {
+    function authoriseStore(int $storeId)
+    {
+        try {
+            $store = \App\Models\Store::findOrFail($storeId);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        config([
+            'authorised' => true,
+            'store_id' => $store->id
+        ]);
+
+        // A store has been authorised, ensure all singletons are reset
+        config(['store' => false]);
+        config(['shopify' => false]);
+        config(['bigcommerce' => false]);
+        config(['dolibarr' => false]);
+        config(['wordpress' => false]);
+        return true;
+    }
+}
+
+
