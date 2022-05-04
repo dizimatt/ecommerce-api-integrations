@@ -46,16 +46,8 @@ class Tester extends StoreAbstractCommand
 
         echo "\n\n";
 
-//        $product = shopify()->getAllProducts(["ids" => "6632857895096"]);
-//        $product = shopify()->getProduct("6632857895096");
-
-//        dump (["BC_products" => bigcommerce()->getProduct(80)]);
-//        dump (["BC_products" => bigcommerce()->getProducts()]);
 
         $dolibarr_products = dolibarr()->getAllProducts();
-//        dd(["dolibarr_product" => $dolibarr_products[0]]);
-
-//        dd(["dolibarr_count" => count($dolibarr_products)]);
 
         $i = 0;
         foreach ($dolibarr_products as $k => $product) {

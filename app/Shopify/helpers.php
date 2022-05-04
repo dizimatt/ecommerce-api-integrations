@@ -35,31 +35,6 @@ if (!function_exists('shopify')) {
             return $data;
         }
     }
-    if (!function_exists('store')) {
-        function store()
-        {
-            if (!isAuthorised()) {
-                return false;
-            }
-
-            // Fetch from Singleton
-            $store = config('store', false);
-
-            if (!$store) {
-                // Initialise Current Store Singleton
-                try {
-                    $store = \App\Shopify\Models\ShopifyStore::findOrFail(config('store_id', false));
-                } catch (\Exception $e) {
-                    return false;
-                }
-
-                // Store as a Singleton
-                config(['store' => $store]);
-            }
-
-            return $store;
-        }
-    }
 
 
     if (!function_exists('setShopifyTopics')) {

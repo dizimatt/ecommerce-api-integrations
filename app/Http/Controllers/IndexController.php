@@ -12,6 +12,10 @@ class IndexController extends BaseController
     }
     public function index(Request $request)
     {
-        return view('index', ['store' => store()]);
+        authoriseStore(1);
+        $all_products = bigcommerce()->getProducts();
+
+//        return json_encode(["store" => store()]);
+        return view('index', ['store' => store(), 'products' => $all_products]);
     }
 }

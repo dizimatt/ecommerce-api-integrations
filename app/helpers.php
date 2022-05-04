@@ -103,5 +103,30 @@ if (!function_exists('authoriseStore')) {
         return true;
     }
 }
+if (!function_exists('store')) {
+    function store()
+    {
+        if (!isAuthorised()) {
+            return false;
+        }
+
+        // Fetch from Singleton
+        $store = config('store', false);
+
+        if (!$store) {
+            // Initialise Current Store Singleton
+            try {
+                $store = \App\Models\Store::findOrFail(config('store_id', false));
+            } catch (\Exception $e) {
+                return false;
+            }
+
+            // Store as a Singleton
+            config(['store' => $store]);
+        }
+
+        return $store;
+    }
+}
 
 

@@ -90,7 +90,7 @@ class Client //extends BasicShopifyAPI
 
         $uri = '/Products/';
         $response = $this->request('GET', $this->url . $uri, [
-            'query' => []
+            'query' => 'variant_filter=2'
         ]);
         if ($response['success'] === true) {
             return (json_decode($response['message'], true));
