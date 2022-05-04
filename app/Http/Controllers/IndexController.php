@@ -12,7 +12,7 @@ class IndexController extends BaseController
     }
     public function index(Request $request)
     {
-        authoriseStore(1);
+//        authoriseStore(1);
         $all_products = bigcommerce()->getProducts();
 
 //        return json_encode(["store" => store()]);

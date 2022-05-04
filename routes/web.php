@@ -14,9 +14,8 @@
 */
 
 $router->group([
-    'prefix' => '/'
-//    ,
-//    'middleware' => ['open-auth'] //shopify-admin-auth
+    'prefix' => '/',
+    'middleware' => ['open-auth'] //shopify-admin-auth
 ], function() use ($router) {
 
     $router->get('/', [
