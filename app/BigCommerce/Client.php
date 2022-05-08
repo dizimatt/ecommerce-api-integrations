@@ -114,6 +114,7 @@ class Client //extends BasicShopifyAPI
                 $result['success'] = false;
                 $result['status_code'] = $errorResponse->getStatusCode();
                 $result['message'] = $errorResponse->getReasonPhrase();
+                $result['body'] = $errorResponse->getBody()->getContents();
             } else {
                 $result['success'] = false;
                 $result['status_code'] = $e->getCode();

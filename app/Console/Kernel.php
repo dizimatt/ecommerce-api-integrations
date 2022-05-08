@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\Tester',
         'App\Console\Commands\SyncToDolibarr',
         'App\Console\Commands\SyncToWordpress',
-        'App\Console\Commands\ShopifyWebhookInit'
+        'App\Console\Commands\ShopifyWebhookInit',
+        'App\Console\Commands\SyncDolibarrToBigCommerce'
     ];
 
     /**

@@ -3,9 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Console\StoreAbstractCommand;
+use App\Services\BigCommerce\SyncProductsFromDolibarr;
 use function PHPUnit\Framework\isNull;
 
-class Tester extends StoreAbstractCommand
+class SyncDolibarrToBigCommerce extends StoreAbstractCommand
 {
     const PROGRESS_BAR_FORMAT = 'debug';
 
@@ -14,7 +15,7 @@ class Tester extends StoreAbstractCommand
      *
      * @var string
      */
-    protected $signature = 'app:test
+    protected $signature = 'bc:syncproducts
                                 {store_id : The integrations Store ID for the Shopify Store}';
 
     /**
@@ -46,13 +47,7 @@ class Tester extends StoreAbstractCommand
 
         echo "\n\n";
 
-
-
-
-        dd();
-
-        $dolibarr_product = dolibarr()->getProduct(3469);
-        dump($dolibarr_product);
+        SyncProductsFromDolibarr::execute();
 
         $time_end = microtime(true);
         $execution_time = $time_end - $time_start;
