@@ -12,6 +12,23 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+$router->group([
+    'prefix' => '/BCDemoApp',
+    'namespace' => 'BC'
+], function() use ($router) {
+    $router->post('/auth/callback', [
+        'uses' => 'AuthController@callback_token',
+        'as' => 'bc-auth-callback-token'
+    ]);
+    $router->get('/auth/callback', [
+        'uses' => 'AuthController@callback',
+        'as' => 'bc-auth-callback'
+    ]);
+    $router->get('/auth/load', [
+        'uses' => 'AuthController@load',
+        'as' => 'bc-auth-load'
+    ]);
+});
 
 $router->group([
     'prefix' => '/',
