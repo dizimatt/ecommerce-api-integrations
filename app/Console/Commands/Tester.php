@@ -47,9 +47,9 @@ class Tester extends StoreAbstractCommand
         echo "\n\n";
 
 
+        $bcproducts = bigcommerce()->getProducts();
 
-
-        dd();
+        dd($bcproducts);
 
         $dolibarr_product = dolibarr()->getProduct(3469);
         dump($dolibarr_product);

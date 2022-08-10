@@ -16,11 +16,15 @@ $router->group([
     'prefix' => '/BCDemoApp',
     'namespace' => 'BC'
 ], function() use ($router) {
-    $router->post('/auth/callback', [
+    $router->post('/auth/load', [
+        'uses' => 'AuthController@callback_token',
+        'as' => 'bc-auth-load-token'
+    ]);
+    $router->post('/auth/oauth', [
         'uses' => 'AuthController@callback_token',
         'as' => 'bc-auth-callback-token'
     ]);
-    $router->get('/auth/callback', [
+    $router->get('/auth/oauth', [
         'uses' => 'AuthController@callback',
         'as' => 'bc-auth-callback'
     ]);
