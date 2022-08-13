@@ -47,6 +47,9 @@ class Tester extends StoreAbstractCommand
         echo "\n\n";
 
 
+        $shopify_products = shopify()->getAllProducts();
+        dd($shopify_products);
+
         $bcproducts = bigcommerce()->getProducts();
 
         dd($bcproducts);

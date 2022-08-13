@@ -13,8 +13,30 @@
 |
 */
 $router->group([
+    'prefix' => '/bigcommerce/api',
+    'namespace' => 'BC',
+    'middleware' => ['open-auth']
+], function() use ($router) {
+    $router->get('/all_products', [
+        'uses' => 'ProductsController@getProducts',
+        'as' => 'bc-products'
+    ]);
+});
+$router->group([
+    'prefix' => '/shopify/api',
+    'namespace' => 'Shopify',
+    'middleware' => ['open-auth']
+], function() use ($router){
+    $router->get('/all_products', [
+        'uses' => 'ProductsController@getProducts',
+        'as' => 'shopify-products'
+    ]);
+});
+
+$router->group([
     'prefix' => '/BCDemoApp',
-    'namespace' => 'BC'
+    'namespace' => 'BC'/*
+    'middleware' => ['open-auth']*/
 ], function() use ($router) {
     $router->post('/auth/load', [
         'uses' => 'AuthController@callback_token',
@@ -34,18 +56,6 @@ $router->group([
     ]);
 });
 
-$router->group([
-    'prefix' => '/',
-    'middleware' => ['open-auth'] //shopify-admin-auth
-], function() use ($router) {
-
-    $router->get('/', [
-        'uses' => 'IndexController@index',
-        'as' => 'app-index'
-    ]);
-
-});
-
 // Request Acknowledgment URL for uptime checks
 $router->get('/ping', function () {
     return response()->json(['ack' => time()]);
@@ -56,16 +66,6 @@ $router->get('/install', [
     'as' => 'app-install'
 ]);
 
-$router->group([
-    'prefix' => '/products',
-    'namespace' => 'Products',
-    'middleware' => ['open-auth'] //shopify-admin-auth
-], function() use ($router){
-    $router->get('/getallproducts', [
-        'uses' => 'ProductsController@getAllProducts',
-        'as' => 'admin-products-getall'
-    ]);
-});
 
 // Authenticated section of the app
 $router->group(['middleware' => ['shopify-admin-auth']], function () use ($router) {

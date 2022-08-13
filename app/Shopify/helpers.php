@@ -7,10 +7,17 @@ if (!function_exists('shopify')) {
 
         if (!$shopify) {
             // Initialise Shopify API Client Singleton
+            // Initialise Current Store Singleton
+            try {
+                $shopify_store = \App\Shopify\Models\ShopifyStore::findOrFail(store()->id);
+            } catch (\Exception $e) {
+                return false;
+            }
+
             $shopify = new \App\Shopify\Client();
 
-            $shopify->setShop(store()->hostname);
-            $shopify->setAccessToken(store()->access_token);
+            $shopify->setShop($shopify_store->hostname);
+            $shopify->setAccessToken($shopify_store->access_token);
             $shopify->setVersion(env('SHOPIFY_APP_API_VERSION'));
             $shopify->startSession();
 

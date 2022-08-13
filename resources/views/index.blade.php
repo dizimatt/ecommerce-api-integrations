@@ -17,7 +17,7 @@
                    echo $product['name'],JSON_PRETTY_PRINT . "<br />";
                 }
                 ?>
-                <a href="/products/getallproducts?shop={{ $store->hostname }}">list all products</a>
+                <a href="/bigcommerce/api/all_products?shop={{ $store->id }}">list all products</a>
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
                 Orders
             </div>
             <div class="col-12">
-                <a href="/products/getallproducts?shop={{ $store->hostname }}">list all orders</a>
+                <a href="/bigcommerce/api/all_products?shop={{ $store->id }}">list all orders</a>
             </div>
         </div>
     </div>

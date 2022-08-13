@@ -7,6 +7,7 @@ use Osiset\BasicShopifyAPI\BasicShopifyAPI;
 use Osiset\BasicShopifyAPI\Options;
 use Osiset\BasicShopifyAPI\Session;
 use App\Console\ConsoleCommand;
+use PHPUnit\Exception;
 
 class Client extends BasicShopifyAPI
 {
@@ -196,12 +197,12 @@ class Client extends BasicShopifyAPI
         }
 
         $numOfProducts = $this->getProductCount($filter);
-
-        if (is_object($numOfProducts) && $numOfProducts->errors) {
-            return $numOfProducts;
+        if (isset($numOfProducts['errors']) && $numOfProducts['errors'] === true){
+            dump($numOfProducts['exception']);
+            $numOfProducts = 0;
         }
-
         $numOfProductPages = ceil($numOfProducts / $productsPerPage);
+
 
         if ($this->isCli) {
             $this->cli->line('');

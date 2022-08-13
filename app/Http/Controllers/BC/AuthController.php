@@ -157,7 +157,10 @@ class AuthController extends Controller
         authoriseStore(1);
         $bc_products = bigcommerce()->getProducts();
 //        dump(['products' => $bc_products]);
-        return(response()->json($bc_products));
+        return(response()->json($bc_products
+        /*[
+            "products" => $bc_products] */
+        ));
 //        return redirect($redirectUrl);
     }
 
