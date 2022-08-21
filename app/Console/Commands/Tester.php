@@ -44,17 +44,16 @@ class Tester extends StoreAbstractCommand
         // Test code here
         // ----------------------------------------------------------------------
 
-        echo "\n\n";
+        echo "\n\n\n\n";
 
 
-        $shopify_products = shopify()->getAllProducts();
-        dd($shopify_products);
+//        $shopify_products = shopify()->getAllProducts();
+//        dd($shopify_products);
 
-        $bcproducts = bigcommerce()->getProducts();
+//        $bcproducts = bigcommerce()->getProducts();
+//        dd($bcproducts);
 
-        dd($bcproducts);
-
-        $dolibarr_product = dolibarr()->getProduct(3469);
+        $dolibarr_product = dolibarr()->getAllProducts();
         dump($dolibarr_product);
 
         $time_end = microtime(true);

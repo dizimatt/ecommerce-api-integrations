@@ -64,7 +64,7 @@ class Client //extends BasicShopifyAPI
 
     }
     public function getProduct($productId){
-        $uri = "/Products/{$productId}";
+        $uri = "Products/{$productId}";
         $response = $this->request('GET', $this->url . $uri, [
             'query' => []
         ]);
@@ -88,13 +88,14 @@ class Client //extends BasicShopifyAPI
     public function getAllProducts()
     {
 
-        $uri = '/Products/';
+        $uri = 'products/';
         $response = $this->request('GET', $this->url . $uri, [
-            'query' => 'variant_filter=2'
+//            'query' => 'variant_filter=2'
         ]);
         if ($response['success'] === true) {
             return (json_decode($response['message'], true));
         } else {
+            dump(["exception" => $response]);
             return [];
         }
     }
