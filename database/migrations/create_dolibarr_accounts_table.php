@@ -13,13 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dolibarr_accounts', function (Blueprint $table) {
-            $table->id();
-            $table->string('sandbox_url');
-            $table->string('sandbox_login');
-            $table->string('sandbox_password');
-            $table->string('sandbox_token',500);
-        });
+        if (!Schema::hasTable('dolibarr_accounts')) {
+
+            Schema::create('dolibarr_accounts', function (Blueprint $table) {
+                $table->id();
+                $table->string('sandbox_url');
+                $table->string('sandbox_login');
+                $table->string('sandbox_password');
+                $table->string('sandbox_token', 500);
+            });
+        }
     }
 
     /**
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('dolibarr_accounts');
+        Schema::dropIfExists('dolibarr_accounts');
     }
 };

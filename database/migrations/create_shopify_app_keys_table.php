@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shopify_app_keys', function (Blueprint $table) {
-            $table->id();
-            $table->string('store_name');
-            $table->string('store_api_key');
-            $table->string('store_api_secret');
-        });
+        if (!Schema::hasTable('shopify_app_keys')) {
+
+            Schema::create('shopify_app_keys', function (Blueprint $table) {
+                $table->id();
+                $table->string('store_name');
+                $table->string('store_api_key');
+                $table->string('store_api_secret');
+            });
+        }
     }
 
     /**

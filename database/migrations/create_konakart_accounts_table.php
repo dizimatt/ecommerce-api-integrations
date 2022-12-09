@@ -13,20 +13,23 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('konakart_accounts', function (Blueprint $table) {
-            $table->id();
-            $table->integer('store_id');
-            $table->string('live_username');
-            $table->string('live_password');
-            $table->string('sandbox_username');
-            $table->string('sandbox_password');
-            $table->boolean('using_sandbox')->default(true);
-            $table->string('sandbox_url');
-            $table->string('live_url');
-            $table->string('sandbox_token');
-            $table->string('live_token');
+        if (!Schema::hasTable('konakart_accounts')) {
 
-        });
+            Schema::create('konakart_accounts', function (Blueprint $table) {
+                $table->id();
+                $table->integer('store_id');
+                $table->string('live_username');
+                $table->string('live_password');
+                $table->string('sandbox_username');
+                $table->string('sandbox_password');
+                $table->boolean('using_sandbox')->default(true);
+                $table->string('sandbox_url');
+                $table->string('live_url');
+                $table->string('sandbox_token');
+                $table->string('live_token');
+
+            });
+        }
     }
 
     /**
@@ -36,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('konakart_accounts');
+        Schema::dropIfExists('konakart_accounts');
     }
 };

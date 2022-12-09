@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('stores', function (Blueprint $table) {
-            $table->id();
-            $table->string('shop_title');
-            $table->string('shop_name')->default('New Store');
-            $table->string('main_store_type')->default('unattached');
-        });
+        if (!Schema::hasTable('stores')) {
+
+            Schema::create('stores', function (Blueprint $table) {
+                $table->id();
+                $table->string('shop_title');
+                $table->string('shop_name')->default('New Store');
+                $table->string('main_store_type')->default('unattached');
+            });
+        }
     }
 
     /**
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('stores');
+        Schema::dropIfExists('stores');
     }
 };

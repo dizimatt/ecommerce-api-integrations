@@ -13,22 +13,25 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shopify_stores', function (Blueprint $table) {
-            $table->id();
-            $table->string('domain');
-            $table->string('hostname');
-            $table->string('name');
-            $table->string('timezone')->default('UTC');
-            $table->string('currency');
-            $table->string('contact_emails');
-            $table->string('access_token');
-            $table->string('scope');
-            $table->timestamps();
-            $table->bigInteger('orders_since_id');
-            $table->string('webhook_signature');
-            $table->timestamp('nonce_created_at')->nullable();
-            $table->string('nonce');
-        });
+        if (!Schema::hasTable('shopify_stores')) {
+
+            Schema::create('shopify_stores', function (Blueprint $table) {
+                $table->id();
+                $table->string('domain');
+                $table->string('hostname');
+                $table->string('name');
+                $table->string('timezone')->default('UTC');
+                $table->string('currency');
+                $table->string('contact_emails');
+                $table->string('access_token');
+                $table->string('scope');
+                $table->timestamps();
+                $table->bigInteger('orders_since_id');
+                $table->string('webhook_signature');
+                $table->timestamp('nonce_created_at')->nullable();
+                $table->string('nonce');
+            });
+        }
     }
 
     /**
@@ -38,6 +41,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('shopify_stores');
+        Schema::dropIfExists('shopify_stores');
     }
 };

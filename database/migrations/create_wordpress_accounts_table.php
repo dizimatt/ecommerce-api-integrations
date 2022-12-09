@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('wordpress_accounts', function (Blueprint $table) {
-            $table->id();
-            $table->integer('store_id');
-            $table->string('sandbox_url');
-            $table->string('sandbox_login');
-            $table->string('sandbox_password');
-            $table->string('sandbox_key');
-            $table->string('sandbox_secret',500);
-        });
+        if (!Schema::hasTable('wordpress_accounts')) {
+            Schema::create('wordpress_accounts', function (Blueprint $table) {
+                $table->id();
+                $table->integer('store_id');
+                $table->string('sandbox_url');
+                $table->string('sandbox_login');
+                $table->string('sandbox_password');
+                $table->string('sandbox_key');
+                $table->string('sandbox_secret', 500);
+            });
+        }
     }
 
     /**
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('wordpress_accounts');
+        Schema::dropIfExists('wordpress_accounts');
     }
 };

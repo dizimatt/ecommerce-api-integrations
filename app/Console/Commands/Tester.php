@@ -48,13 +48,13 @@ class Tester extends StoreAbstractCommand
 
 
 //        $shopify_products = shopify()->getAllProducts();
-//        dd($shopify_products);
+//        dump($shopify_products);
 
-//        $bcproducts = bigcommerce()->getProducts();
-//        dd($bcproducts);
+        $bcproducts = bigcommerce()->getProducts();
+        dump($bcproducts);
 
-        $dolibarr_product = dolibarr()->getAllProducts();
-        dump($dolibarr_product);
+//        $dolibarr_product = dolibarr()->getAllProducts();
+//        dump($dolibarr_product);
 
         $time_end = microtime(true);
         $execution_time = $time_end - $time_start;
