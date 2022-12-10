@@ -47,11 +47,12 @@ class Tester extends StoreAbstractCommand
         echo "\n\n\n\n";
 
 
+        dump(stores());
 //        $shopify_products = shopify()->getAllProducts();
 //        dump($shopify_products);
 
-        $bcproducts = bigcommerce()->getProducts();
-        dump($bcproducts);
+//        $bcproducts = bigcommerce()->getProducts();
+//        dump($bcproducts);
 
 //        $dolibarr_product = dolibarr()->getAllProducts();
 //        dump($dolibarr_product);

@@ -38,8 +38,8 @@ class OpenAuthenticate
         }
 
         try {
-//            $store = ShopifyStore::where('hostname', $getData['shop'])->firstOrFail();
-            $store = Store::findOrFail($getData['shop']);
+            $store = ShopifyStore::where('hostname', $getData['shop'])->firstOrFail();
+//            $store = Store::findOrFail($getData['shop']);
         } catch (\Exception $e) {
             $response = [];
 

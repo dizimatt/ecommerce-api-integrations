@@ -23,6 +23,16 @@ $router->group([
     ]);
 });
 $router->group([
+    'prefix' => '/',
+    'namespace' => 'Shopify\Admin',
+    'middleware' => ['open-auth']
+], function() use ($router){
+    $router->get('/', [
+        'uses' => 'IndexController@index',
+        'as' => 'shopify-admin-index'
+    ]);
+});
+$router->group([
     'prefix' => '/shopify/api',
     'namespace' => 'Shopify',
     'middleware' => ['open-auth']
@@ -61,6 +71,10 @@ $router->get('/ping', function () {
     return response()->json(['ack' => time()]);
 });
 // Base Shopify app installation route
+$router->get('/install', [
+    'uses' => 'InstallationController@installStore',
+    'as' => 'app-install'
+]);
 $router->get('/install', [
     'uses' => 'InstallationController@installStore',
     'as' => 'app-install'

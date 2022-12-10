@@ -228,11 +228,13 @@ class InstallationController extends Controller
         $store->clearNonce();
 
         // Post installation core data fetching
-        $shopifyStore = shopify()->getShop();
-        if (!is_object($shopifyStore) && !isset($shopifyStore->errors)) {
-            $store->timezone = $shopifyStore['iana_timezone'];
-            $store->currency = $shopifyStore['currency'];
-            $store->save();
+        if ($shopify) {
+            $shopifyStore = shopify()->getShop();
+            if (!is_object($shopifyStore) && !isset($shopifyStore->errors)) {
+                $store->timezone = $shopifyStore['iana_timezone'];
+                $store->currency = $shopifyStore['currency'];
+                $store->save();
+            }
         }
 
         // Installation successful, branch off here and perform any initialisation tasks
