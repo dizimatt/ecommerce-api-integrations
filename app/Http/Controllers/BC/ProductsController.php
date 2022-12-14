@@ -42,4 +42,34 @@ class ProductsController extends Controller
 
     }
 
+    public function testProducts(Request $request)
+    {
+        /*
+        $queryParams = [
+        ];
+        $queryString = urldecode(http_build_query($queryParams));
+*/
+        // Reset any Session data and set the installation Store to session
+        session()->flush();
+
+
+        try {
+
+            $bc_products = bigcommerce()->getProducts();
+            $return_html = "<html><body><table><tr><th>id</th><th>Name</th><th>Price</th></tr>";
+            foreach ($bc_products['data'] as $bc_product) {
+                $product_edit_url = "/manage/products/edit/{$bc_product['id']}";
+                $return_html .= "<tr><td><a href=\"{$product_edit_url}\">{$bc_product['id']}</a></td><td>{$bc_product['name']}</td><td>{$bc_product['price']}</td></tr>";
+            }
+            $return_html .= "</table><hr />"
+                ."<a href=\"/bigcommerce/app/auth/load?store=".$request->store."\">back to App Home</a>"
+                ."</body></html>";
+            return $return_html;
+
+        } catch (\Exception $e) {
+            return "exception: " . $e->getMessage();
+        }
+
+    }
+
 }

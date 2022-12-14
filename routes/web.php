@@ -22,30 +22,38 @@ $router->group([
         'as' => 'bc-products'
     ]);
 });
+
 $router->group([
     'prefix' => '/bigcommerce/app',
-    'namespace' => 'BC'/*
-    'middleware' => ['open-auth']*/
+    'namespace' => 'BC',
+    'middleware' => ['bc-auth']
 ], function() use ($router) {
-    $router->post('/auth/load', [
+    $router->get('/products', [
+        'uses' => 'ProductsController@testProducts',
+        'as' => 'bc-testproducts'
+    ]);
+});
+
+
+$router->group([
+    'prefix' => '/bigcommerce/app/auth',
+    'namespace' => 'BC'
+], function() use ($router) {
+    $router->post('/load', [
         'uses' => 'AuthController@callback_token',
         'as' => 'bc-auth-load-token'
     ]);
-    $router->post('/auth/oauth', [
+    $router->post('/oauth', [
         'uses' => 'AuthController@callback_token',
         'as' => 'bc-auth-callback-token'
     ]);
-    $router->get('/auth/oauth', [
+    $router->get('/oauth', [
         'uses' => 'AuthController@callback',
         'as' => 'bc-auth-callback'
     ]);
-    $router->get('/auth/load', [
+    $router->get('/load', [
         'uses' => 'AuthController@load',
         'as' => 'bc-auth-load'
-    ]);
-    $router->get('/products', [
-    'uses' => 'AuthController@testProducts',
-        'as' => 'bc-testproducts'
     ]);
 });
 

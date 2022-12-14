@@ -176,13 +176,9 @@ class AuthController extends Controller
 
     }
 
+/*
     public function testProducts(Request $request)
     {
-        /*
-        $queryParams = [
-        ];
-        $queryString = urldecode(http_build_query($queryParams));
-*/
         // Reset any Session data and set the installation Store to session
         session()->flush();
 
@@ -216,4 +212,5 @@ class AuthController extends Controller
         }
 
     }
+    */
 }
