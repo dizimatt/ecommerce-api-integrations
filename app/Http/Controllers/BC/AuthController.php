@@ -142,7 +142,7 @@ class AuthController extends Controller
             'logs/bc-load.log'
         );
         $logger->pushHandler(new StreamHandler($loggerFilename), Logger::INFO);
-        $logger->info("called load request");
+        $logger->info("called load request - debugging right now...");
 
         $queryParams = [
         ];
@@ -151,17 +151,37 @@ class AuthController extends Controller
         // Reset any Session data and set the installation Store to session
         session()->flush();
 
-//        $redirectUrl = 'https://openresourcing.mybigcommerce.com.au' . '?' . $queryString;
+        $redirectUrl = 'https://openresourcing.mybigcommerce.com.au' . '?' . $queryString;
 //        dd($redirectUrl);
 //        dump(['testing']);
-        authoriseStore(1);
+
+        $referer_header_domain = rtrim(
+            str_replace("https://",'',$request->header('referer')),
+            '/'
+        );
+        try {
+            $bigcommerce_store = \App\BigCommerce\Models\BigCommerceStore::where('domain', $referer_header_domain)
+                ->first();
+            if (!$bigcommerce_store){
+                throw (new \Exception("can't find matching referer domain: " . $referer_header_domain));
+            }
+
+            authoriseStore($bigcommerce_store->id);
         $bc_products = bigcommerce()->getProducts();
 //        dump(['products' => $bc_products]);
-        return(response()->json($bc_products
-        /*[
-            "products" => $bc_products] */
-        ));
+//        return(response()->json($bc_products
+
+            return (response()->json([
+                "request referer domain:" => $referer_header_domain,
+                "bigcommerce_store_id" => $bigcommerce_store->id,
+                "bc_products" => $bc_products
+            ]));
+
 //        return redirect($redirectUrl);
+        } catch(\Exception $e){
+            return "exception: " . $e->getMessage();
+        }
+
     }
 
 }
