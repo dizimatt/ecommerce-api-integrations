@@ -44,10 +44,11 @@ class AuthController extends Controller
                 $BCStore->access_token = $access_token;
                 $BCStore->save();
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $logger->error($e->getMessage());
         }
     }
+
     /**
      * Initialise Shopify Store installation process
      */
@@ -60,12 +61,12 @@ class AuthController extends Controller
         $logger->pushHandler(new StreamHandler($loggerFilename), Logger::INFO);
         $logger->info("called callback request");
 
-        $code=$request->code;
-        $context=$request->context;
-        $scope=$request->scope;
-        $client_id=env('BC_CLIENT_ID');
-        $client_secret=env('BC_CLIENT_SECRET');
-        $redirect_uri=env('APP_URL');
+        $code = $request->code;
+        $context = $request->context;
+        $scope = $request->scope;
+        $client_id = env('BC_CLIENT_ID');
+        $client_secret = env('BC_CLIENT_SECRET');
+        $redirect_uri = env('APP_URL');
 
         $logger->info("request: code: " . $code);
         $logger->info("request: context: " . $context);
@@ -112,9 +113,9 @@ class AuthController extends Controller
 
             return response()->json($response, $errorCode);
         }
-        $response_obj = json_decode($BCResponse->getBody()->getContents(),true);
+        $response_obj = json_decode($BCResponse->getBody()->getContents(), true);
         dump(["body" => $response_obj]);
-        if (isset($response_obj['access_token'])){
+        if (isset($response_obj['access_token'])) {
             $access_token = $response_obj['access_token'];
         } else {
             $access_token = null;
@@ -132,9 +133,10 @@ class AuthController extends Controller
 
 //        $redirectUrl = 'https://openresourcing.mybigcommerce.com.au' . '?' . $queryString;
 //        dd($redirectUrl);
-        return(json_encode(['authed-access-token' => $access_token]));
+        return (json_encode(['authed-access-token' => $access_token]));
 //        return redirect($redirectUrl);
     }
+
     public function load(Request $request)
     {
         $logger = new Logger('bc-load');
@@ -144,44 +146,74 @@ class AuthController extends Controller
         $logger->pushHandler(new StreamHandler($loggerFilename), Logger::INFO);
         $logger->info("called load request - debugging right now...");
 
-        $queryParams = [
-        ];
-        $queryString = urldecode(http_build_query($queryParams));
 
-        // Reset any Session data and set the installation Store to session
-        session()->flush();
-
-        $redirectUrl = 'https://openresourcing.mybigcommerce.com.au' . '?' . $queryString;
-//        dd($redirectUrl);
-//        dump(['testing']);
-
-        $referer_header_domain = rtrim(
-            str_replace("https://",'',$request->header('referer')),
-            '/'
-        );
         try {
+            if (isset($request->store)){
+                $referer_header_domain = $request->store;
+            } elseif ($request->header('referer')){
+                $referer_header_domain = rtrim(
+                    str_replace("https://", '', $request->header('referer')),
+                    '/'
+                );
+            } else {
+                throw(new \Exception("store domain has not been passed in"));
+            }
+
             $bigcommerce_store = \App\BigCommerce\Models\BigCommerceStore::where('domain', $referer_header_domain)
                 ->first();
-            if (!$bigcommerce_store){
+            if (!$bigcommerce_store) {
                 throw (new \Exception("can't find matching referer domain: " . $referer_header_domain));
             }
 
+        } catch (\Exception $e) {
+            return "exception: " . $e->getMessage();
+        }
+
+        $return_html = "<html><body><h1>Welcome to Open Resourcing - Big Commerce </h1>"
+        . "<a href=\"/bigcommerce/app/products?store={$bigcommerce_store->domain}\">fetch the list of products</a>"
+        . "</body></html>";
+        return $return_html;
+
+    }
+
+    public function testProducts(Request $request)
+    {
+        /*
+        $queryParams = [
+        ];
+        $queryString = urldecode(http_build_query($queryParams));
+*/
+        // Reset any Session data and set the installation Store to session
+        session()->flush();
+
+
+        try {
+            if (!isset($request->store)){
+                throw(new \Exception ("store domain has not been passed in"));
+            }
+
+            $bigcommerce_store = \App\BigCommerce\Models\BigCommerceStore::where('domain', $request->store)
+                ->first();
+            if (!$bigcommerce_store) {
+                throw (new \Exception("can't find matching referer domain: " . $request->store));
+            }
+
             authoriseStore($bigcommerce_store->id);
-        $bc_products = bigcommerce()->getProducts();
-//        dump(['products' => $bc_products]);
-//        return(response()->json($bc_products
+            $bc_products = bigcommerce()->getProducts();
+            $return_html = "<html><body><table><tr><th>id</th><th>Name</th><th>Price</th></tr>";
+            foreach ($bc_products['data'] as $bc_product) {
+                $product_edit_url = "https://{$bigcommerce_store->domain}/manage/products/edit/{$bc_product['id']}";
+                $return_html .= "<tr><td><a href=\"{$product_edit_url}\">{$bc_product['id']}</a></td><td>{$bc_product['name']}</td><td>{$bc_product['price']}</td></tr>";
+            }
+            $return_html .= "</table><hr />"
+                ."<a href=\"/bigcommerce/app/auth/load?store=".$request->store."\">back to App Home</a>"
+                ."</body></html>";
+            return $return_html;
 
-            return (response()->json([
-                "request referer domain:" => $referer_header_domain,
-                "bigcommerce_store_id" => $bigcommerce_store->id,
-                "bc_products" => $bc_products
-            ]));
-
-//        return redirect($redirectUrl);
-        } catch(\Exception $e){
+            return redirect($redirectUrl);
+        } catch (\Exception $e) {
             return "exception: " . $e->getMessage();
         }
 
     }
-
 }

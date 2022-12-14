@@ -23,6 +23,35 @@ $router->group([
     ]);
 });
 $router->group([
+    'prefix' => '/bigcommerce/app',
+    'namespace' => 'BC'/*
+    'middleware' => ['open-auth']*/
+], function() use ($router) {
+    $router->post('/auth/load', [
+        'uses' => 'AuthController@callback_token',
+        'as' => 'bc-auth-load-token'
+    ]);
+    $router->post('/auth/oauth', [
+        'uses' => 'AuthController@callback_token',
+        'as' => 'bc-auth-callback-token'
+    ]);
+    $router->get('/auth/oauth', [
+        'uses' => 'AuthController@callback',
+        'as' => 'bc-auth-callback'
+    ]);
+    $router->get('/auth/load', [
+        'uses' => 'AuthController@load',
+        'as' => 'bc-auth-load'
+    ]);
+    $router->get('/products', [
+    'uses' => 'AuthController@testProducts',
+        'as' => 'bc-testproducts'
+    ]);
+});
+
+
+
+$router->group([
     'prefix' => '/',
     'namespace' => 'Shopify\Admin',
     'middleware' => ['open-auth']
@@ -43,28 +72,6 @@ $router->group([
     ]);
 });
 
-$router->group([
-    'prefix' => '/BCDemoApp',
-    'namespace' => 'BC'/*
-    'middleware' => ['open-auth']*/
-], function() use ($router) {
-    $router->post('/auth/load', [
-        'uses' => 'AuthController@callback_token',
-        'as' => 'bc-auth-load-token'
-    ]);
-    $router->post('/auth/oauth', [
-        'uses' => 'AuthController@callback_token',
-        'as' => 'bc-auth-callback-token'
-    ]);
-    $router->get('/auth/oauth', [
-        'uses' => 'AuthController@callback',
-        'as' => 'bc-auth-callback'
-    ]);
-    $router->get('/auth/load', [
-        'uses' => 'AuthController@load',
-        'as' => 'bc-auth-load'
-    ]);
-});
 
 // Request Acknowledgment URL for uptime checks
 $router->get('/ping', function () {
