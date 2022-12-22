@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Console\StoreAbstractCommand;
-use function PHPUnit\Framework\isNull;
 
-class Tester extends StoreAbstractCommand
+class IndexBigCommerceProducts extends StoreAbstractCommand
 {
     const PROGRESS_BAR_FORMAT = 'debug';
 
@@ -14,7 +13,7 @@ class Tester extends StoreAbstractCommand
      *
      * @var string
      */
-    protected $signature = 'app:test
+    protected $signature = 'bigcommerce:index:products
                                 {store_id : The integrations Store ID for the Shopify Store}';
 
     /**
@@ -48,14 +47,28 @@ class Tester extends StoreAbstractCommand
 
 
 //        dump(stores());
-        $shopify_products = shopify()->getAllProducts();
-        dump($shopify_products);
+//        $shopify_products = shopify()->getAllProducts();
+//        dump($shopify_products);
 
-//        $bcproducts = bigcommerce()->getProducts();
-//        dump($bcproducts);
+        $bcproducts = bigcommerce()->getProducts();
+        \App\BigCommerce\Models\BigCommerceProduct::truncate();
 
-//        $dolibarr_product = dolibarr()->getAllProducts();
-//        dump($dolibarr_product);
+        foreach ($bcproducts['data'] as $bc_product){
+            $bigcommerceProduct = new \App\BigCommerce\Models\BigCommerceProduct();
+            $bigcommerceProduct->store_id = store()->id;
+            $bigcommerceProduct->name = $bc_product['name'];
+            $bigcommerceProduct->sku = $bc_product['sku'];
+            $bigcommerceProduct->retail_price = $bc_product['retail_price'];
+            $bigcommerceProduct->is_visible = $bc_product['is_visible'];
+            $bigcommerceProduct->date_created = $bc_product['date_created'];
+            $bigcommerceProduct->date_modified = $bc_product['date_modified'];
+            try {
+                $bigcommerceProduct->saveOrFail();
+            } catch(\Exception $e){
+                $this->info('failed to insert the row - possible a duplicate error - see following exception: ' . $e->getMessage());
+            }
+        }
+
 
         $time_end = microtime(true);
         $execution_time = $time_end - $time_start;
