@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Console\StoreAbstractCommand;
 use function PHPUnit\Framework\isNull;
 
-class Tester extends StoreAbstractCommand
+class RegisterIndeedAPI extends StoreAbstractCommand
 {
     const PROGRESS_BAR_FORMAT = 'debug';
 
@@ -14,8 +14,8 @@ class Tester extends StoreAbstractCommand
      *
      * @var string
      */
-    protected $signature = 'app:test
-                                {store_id : The integrations Store ID for the Shopify Store}';
+    protected $signature = 'indeed:register
+                                {store_id : The integrations ID for Indeed API calls}';
 
     /**
      * The console command description.
@@ -48,18 +48,8 @@ class Tester extends StoreAbstractCommand
 
 
 //        dump(stores());
-
-//        $indeed_api = indeed()->testClientMethod();
-        $appinfo = indeed()->appInfo();
-        dump($appinfo);
-//        $shopify_products = shopify()->getAllProducts();
-//        dump($shopify_products);
-
-//        $bcproducts = bigcommerce()->getProducts();
-//        dump($bcproducts);
-
-//        $dolibarr_product = dolibarr()->getAllProducts();
-//        dump($dolibarr_product);
+        $indeed_client = indeed();
+        $init_response = $indeed_client->initIndeedAPI();
 
         $time_end = microtime(true);
         $execution_time = $time_end - $time_start;

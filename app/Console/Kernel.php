@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'App\Console\Commands\Tester',
+        'App\Console\Commands\RegisterIndeedAPI',
         'App\Console\Commands\IndexBigCommerceProducts',
         'App\Console\Commands\IndexShopifyProducts',
         'App\Console\Commands\SyncToDolibarr',
