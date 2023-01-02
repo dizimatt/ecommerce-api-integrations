@@ -52,6 +52,18 @@
                 <div>
                     <h1>Shopify Panel</h1>
                     <p>Nothing to see here! please move along...</p>
+                    <table>
+                        <tr>
+                            <th style={ {textAlign: 'left'} }>Shop Name</th><th style={ {textAlign: 'left'} }>id</th><th style={ {textAlign: 'left'} }>title</th>
+                        </tr>
+                        @foreach($shopify_products as $product)
+                        <tr>
+                        <td>{{store()->shop_name}}</td>
+                        <td>{{$product['id']}}</td>
+                        <td>{{$product['title']}}</td>
+                        </tr>
+                        @endforeach
+                    </table>
                 </div>
             );
         }
@@ -60,8 +72,20 @@
         render(){
             return (
                 <div>
-                    <h1>Bigcommerce Panel</h1>
+                    <h1>BigCommerce Panel</h1>
                     <p>Nothing to see here! please move along...</p>
+                    <table>
+                        <tr>
+                            <th style={ {textAlign: 'left'} }>Shop Name</th> <th style={ {textAlign: 'left'} }>id</th><th style={ {textAlign: 'left'} }>title</th>
+                        </tr>
+                        @foreach($bigcommerce_products as $product)
+                        <tr>
+                        <td>{{store()->shop_name}}</td>
+                        <td>{{$product['id']}}</td>
+                        <td>{{$product['name']}}</td>
+                        </tr>
+                        @endforeach
+                    </table>
                 </div>
             );
         }
@@ -119,7 +143,6 @@
         }
 
         render() {
-            var currentPanel = this.state.currentPanel;
             return (
                 <div className="admin">
                     <div className="admin-menu">

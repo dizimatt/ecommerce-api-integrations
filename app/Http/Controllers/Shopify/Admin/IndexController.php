@@ -13,27 +13,11 @@ class IndexController extends BaseController
     }
     public function index(Request $request)
     {
-        return "<h1>Welcome to Open Resourcing Shopify App</h1>";
-    }
-    public function listAllProducts(Request $request)
-    {
-        $products = shopify()->getAllProducts(); //["ids" => "6632857895096"]);
-//        $dolibarr_product = dolibarr()->getAllProducts(); //getProduct(3469);
-        $html = '<table><tr><th>id</th><th>image</th><th>title</th></tr>';
-        foreach ($products as $product){
-            if ($product) {
-                $html .= "<tr><td>{$product['id']}</td>".
-                "<td>".($product['image']?"<img src='{$product['image']['src']}' width='250' />":"")."</td>".
-                "<td>{$product['title']}</td></tr>";
-            }
-        }
-        $html .= '</table>';
-        return $html;
-        return response()->json([
-            "success" => true,
-            "products" => $products,
-//            "dolibarr_product" => $dolibarr_product
+        $shopify_products = \App\Shopify\Models\ShopifyProduct::where('store_id',store()->id)->get();
+        $bigcommerce_products = \App\BigCommerce\Models\BigCommerceProduct::where('store_id',store()->id)->get();
+        return view('shopify.index',[
+            'shopify_products' => $shopify_products,
+            'bigcommerce_products' => $bigcommerce_products
         ]);
-
     }
 }
