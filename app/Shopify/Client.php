@@ -26,7 +26,8 @@ class Client extends BasicShopifyAPI
         $this->cli = new ConsoleCommand();
 
         $options = new Options();
-        $options->setVersion('2021-10');
+//        $options->setVersion('2021-10');
+        $options->setVersion('2023-01');
         return parent::__construct($options);
     }
 
@@ -43,6 +44,34 @@ class Client extends BasicShopifyAPI
     }
     public function startSession(){
         $this->setSession(new Session($this->shop, $this->accesstoken));
+    }
+
+    public function createProduct($data, bool $getFullResponse = false)
+    {
+        $productPayload = ['product' => $data];
+        $api_path = '/admin/api/' .
+            '2023-01'.
+            '/products.json';
+
+/*
+        dd([
+            "data" => $productPayload,
+            'path' => $api_path
+        ]);
+*/
+        $response = $this->rest('POST', $api_path, $productPayload);
+
+        if ($getFullResponse) {
+            return $response;
+        }
+
+        if (isset($response['errors']) && !empty($response['errors'])) {
+            return $response;
+        }
+
+        $array_data = json_decode(json_encode($response['body']->product), true);
+
+        return $array_data;
     }
 
     public function getAllNonSyncedOrders(array $filter = null, $tagToCheck = self::ORDER_SYNC_TAG)
