@@ -62,7 +62,7 @@ $router->group([
 $router->group([
     'prefix' => '/',
     'namespace' => 'Shopify\Admin',
-    'middleware' => ['open-auth']
+    'middleware' => ['shopify-admin-auth']
 ], function() use ($router){
     $router->get('/', [
         'uses' => 'IndexController@index',
@@ -97,7 +97,7 @@ $router->get('/install', [
 
 
 // Authenticated section of the app
-$router->group(['middleware' => ['shopify-admin-auth']], function () use ($router) {
+$router->group(['middleware' => ['shopify-hmac-auth']], function () use ($router) {
     // Installation validation controller
     $router->get('/install/validate', [
         'uses' => 'InstallationController@validateStore',

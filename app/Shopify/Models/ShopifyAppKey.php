@@ -2,9 +2,10 @@
 
 namespace App\Shopify\Models;
 
-use App\DB\BaseModel;
+//use App\DB\BaseModel;
+use Illuminate\Database\Eloquent\Model;
 
-class StoreAppKey extends BaseModel
+class ShopifyAppKey extends Model
 {
     protected $table = 'shopify_app_keys';
 

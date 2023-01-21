@@ -107,7 +107,7 @@ class ShopifyHmacAuthenticate
                 }
                 $mergedQuery = implode('', $mergedQuery);
             }
-            foreach (stores() as $storeName => $storeKeys){
+            foreach (shopifyStores() as $storeName => $storeKeys){
                 if ($storeName == $getData['shop']) {
                     $this->_appApiSecret = $storeKeys['secret'];
                 }

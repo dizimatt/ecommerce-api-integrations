@@ -93,7 +93,8 @@ $app->middleware([
 ]);
 
 $app->routeMiddleware([
-    'shopify-admin-auth' => App\Http\Middleware\ShopifyHmacAuthenticate::class,
+    'shopify-admin-auth' => App\Http\Middleware\ShopifyAdminAuthenticate::class,
+    'shopify-hmac-auth' => App\Http\Middleware\ShopifyHmacAuthenticate::class,
     'shopify-webhook-auth' => App\Http\Middleware\ShopifyWebhookAuthenticate::class,
     'open-auth' => App\Http\Middleware\OpenAuthenticate::class,
     'bc-auth' => App\Http\Middleware\BCAuthenticate::class,

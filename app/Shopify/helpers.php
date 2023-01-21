@@ -27,10 +27,10 @@ if (!function_exists('shopify')) {
 
         return $shopify;
     }
-    if (!function_exists('stores')) {
-        function stores()
+    if (!function_exists('shopifyStores')) {
+        function shopifyStores()
         {
-            $key_store_data = \App\Shopify\Models\StoreAppKey::get();
+            $key_store_data = \App\Shopify\Models\ShopifyAppKey::get();
             $data = array();
 
             $i = 0;
@@ -42,7 +42,6 @@ if (!function_exists('shopify')) {
             return $data;
         }
     }
-
 
     if (!function_exists('setShopifyTopics')) {
         function setShopifyTopics(array $shopifyTopics)
