@@ -50,10 +50,33 @@ class Tester extends StoreAbstractCommand
 //        dump(stores());
 
 //        $indeed_api = indeed()->testClientMethod();
-        $appinfo = indeed()->appInfo();
-        dump($appinfo);
+//        $appinfo = indeed()->appInfo();
+//        dump($appinfo);
 //        $shopify_products = shopify()->getAllProducts();
 //        dump($shopify_products);
+
+
+        $shopify_products = shopify()->getAllProducts(["handle" => "test-product-number-1"]);
+        if ($shopify_products) {
+            dump([
+                "product_count" => count($shopify_products),
+                "shopify_products" => $shopify_products
+            ]);
+
+            foreach ($shopify_products as $shopify_product) {
+
+            }
+        }
+/*
+         $mage2_results = mage2()->fetchProductsFromFilter([
+             "searchCriteria[filter_groups][0][filters][0][field]" => "sku",
+             "searchCriteria[filter_groups][0][filters][0][value]" =>  "null",
+             "searchCriteria[filter_groups][0][filters][0][condition_type]" => "neq"
+         ]);
+         dump([
+             "results" => $mage2_results
+         ]);
+*/
 
 //        $bcproducts = bigcommerce()->getProducts();
 //        dump($bcproducts);

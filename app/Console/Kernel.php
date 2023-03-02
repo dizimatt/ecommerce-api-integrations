@@ -21,7 +21,8 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\SyncToWordpress',
         'App\Console\Commands\ShopifyWebhookInit',
         'App\Console\Commands\SyncDolibarrToBigCommerce',
-        'App\Console\Commands\SyncBigCommerceToShopify'
+        'App\Console\Commands\SyncBigCommerceToShopify',
+        'App\Console\Commands\Mage2PopulateProducts'
     ];
 
     /**

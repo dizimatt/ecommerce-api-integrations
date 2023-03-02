@@ -100,6 +100,7 @@ if (!function_exists('authoriseStore')) {
         config(['bigcommerce' => false]);
         config(['dolibarr' => false]);
         config(['wordpress' => false]);
+        config(['mage2' => false]);
         return true;
     }
 }
