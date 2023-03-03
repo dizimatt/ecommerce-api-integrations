@@ -97,9 +97,7 @@ class Client
 
     public function createProduct($payload = []){
         $uri = "products";
-        dump([
-           "product_as_json" => json_encode($payload)
-        ]);
+
         $response = $this->request('POST', $this->url . $uri, [
             'body' => json_encode($payload)
         ]);

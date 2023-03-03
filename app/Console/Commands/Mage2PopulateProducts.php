@@ -45,106 +45,67 @@ class Mage2PopulateProducts extends StoreAbstractCommand
         // ----------------------------------------------------------------------
 
         echo "\n\n\n\n";
-
-/*
-        $attribute_sets = mage2()->fetchAttributeSets();
-        dump([
-            "results" => $attribute_sets
-        ]);
-*/
-/*
-        $attributes = mage2()->fetchAttributes(1);
-        dump([
-            "results" => $attributes
-        ]);
-*/
-
-        $categories = mage2()->fetchAllCategories();
-        dump([
-            "results" => $categories
-        ]);
-/*
         $shopify_products = shopify()->getAllProducts(["handle" => "test-product-number-1"]);
+        if (isset($shopify_products['errors'])){
+            dd([
+                "failed message" => $shopify_products['errors']
+            ]);
+        }
         if ($shopify_products) {
             dump([
                 "product_count" => count($shopify_products),
                 "shopify_products" => $shopify_products
             ]);
 
-            foreach ($shopify_products as $shopify_product) {
-*/
+            $product_to_insert = $shopify_products[0];
                 $payload = [
                     "product" => [
-                        "sku" => "MS-Champ",
-                        "name" => "Champ Tee",
-                        "attribute_set_id" => 0,
+                        "sku" => $product_to_insert['variants'][0]['sku'],
+                        "name" => $product_to_insert['title'],
+                        "attribute_set_id" => 4,
+                        "price" => $product_to_insert['variants'][0]['price'],
                         "status" => 1,
-                        "visibility" => 4,
-                        "type_id" => "configurable",
-                        "weight" => "0.5",
+                        "visibility" => 1,
+                        "type_id" => "Default",
+                        "weight" => "500",
                         "extension_attributes" => [
                             "category_links" => [
                                 [
                                     "position" => 0,
                                     "category_id" => "2"
                                 ]
-                            ]
+                              ],
+                              "stock_item" => [
+                                  "qty" => $product_to_insert['variants'][0]['inventory_quantity'],
+                                  "is_in_stock" => true
+                              ]
                         ],
-                        /*
                         "custom_attributes" => [
-                            [
-                                "attribute_code" => "description",
-                                "value" => "The Champ Tee keeps you cool and dry while you do your thing. Let everyone know who you are by adding your name on the back for only $10."
-                            ],
-                            [
-                                "attribute_code" => "tax_class_id",
-                                "value" => "2"
-                            ],
-                            [
-                                "attribute_code" => "material",
-                                "value" => "148"
-                            ],
-                            [
-                                "attribute_code" => "pattern",
-                                "value" => "196"
-                            ],
-                            [
-                                "attribute_code" => "color",
-                                "value" => "52"
-                            ]
+                          [
+                              "attribute_code" => "pattern",
+                              "value" => "1960"
+                          ],
+                          [
+                              "attribute_code" => "color",
+                              "value" => "45"
+                          ],
+                          [
+                              "attribute_code" => "size",
+                              "value" => "168"
+                          ]
                         ]
-*/
                     ]
                 ];
-  //              dump([
-  //                  "will insert:" => $payload
-  //              ]);
+                echo " product_as_json_string : ".json_encode($payload,JSON_PRETTY_PRINT);
+
+//            dd(["skipping creation"]);
 
                 $result = mage2()->createProduct($payload);
                 dump([
                     "insert result" => $result
                 ]);
-                /*
-            }
         }
-                */
 
-        /*
-                 $mage2_results = mage2()->fetchProductsFromFilter([
-                     "searchCriteria[filter_groups][0][filters][0][field]" => "sku",
-                     "searchCriteria[filter_groups][0][filters][0][value]" =>  "null",
-                     "searchCriteria[filter_groups][0][filters][0][condition_type]" => "neq"
-                 ]);
-                 dump([
-                     "results" => $mage2_results
-                 ]);
-        */
-
-//        $bcproducts = bigcommerce()->getProducts();
-//        dump($bcproducts);
-
-//        $dolibarr_product = dolibarr()->getAllProducts();
-//        dump($dolibarr_product);
 
             $time_end = microtime(true);
             $execution_time = $time_end - $time_start;
