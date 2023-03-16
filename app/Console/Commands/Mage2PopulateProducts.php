@@ -45,7 +45,7 @@ class Mage2PopulateProducts extends StoreAbstractCommand
         // ----------------------------------------------------------------------
 
         echo "\n\n\n\n";
-        $shopify_products = shopify()->getAllProducts(["handle" => "test-product-number-1"]);
+        $shopify_products = shopify()->getAllProducts([]); //["handle" => "test-product-number-1"]);
         if (isset($shopify_products['errors'])){
             dd([
                 "failed message" => $shopify_products['errors']
@@ -57,16 +57,17 @@ class Mage2PopulateProducts extends StoreAbstractCommand
                 "shopify_products" => $shopify_products
             ]);
 
-            $product_to_insert = $shopify_products[0];
+            foreach ($shopify_products as $shopify_product) {
                 $payload = [
                     "product" => [
-                        "sku" => $product_to_insert['variants'][0]['sku'],
-                        "name" => $product_to_insert['title'],
+                        "sku" => ($shopify_product['variants'][0]['sku']?$shopify_product['variants'][0]['sku']
+                            : $shopify_product['handle'] . '-' . $shopify_product['variants'][0]['position']),
+                        "name" => $shopify_product['title'],
                         "attribute_set_id" => 4,
-                        "price" => $product_to_insert['variants'][0]['price'],
+                        "price" => (real)$shopify_product['variants'][0]['price'],
                         "status" => 1,
                         "visibility" => 1,
-                        "type_id" => "Default",
+                        "type_id" => "simple",
                         "weight" => "500",
                         "extension_attributes" => [
                             "category_links" => [
@@ -74,29 +75,30 @@ class Mage2PopulateProducts extends StoreAbstractCommand
                                     "position" => 0,
                                     "category_id" => "2"
                                 ]
-                              ],
-                              "stock_item" => [
-                                  "qty" => $product_to_insert['variants'][0]['inventory_quantity'],
-                                  "is_in_stock" => true
-                              ]
+                            ],
+                            "stock_item" => [
+                                "qty" => $shopify_product['variants'][0]['inventory_quantity'],
+                                "is_in_stock" => true
+                            ]
                         ],
-                        "custom_attributes" => [
-                          [
-                              "attribute_code" => "pattern",
-                              "value" => "1960"
-                          ],
-                          [
-                              "attribute_code" => "color",
-                              "value" => "45"
-                          ],
-                          [
-                              "attribute_code" => "size",
-                              "value" => "168"
-                          ]
+/*                        "custom_attributes" => [
+                            [
+                                "attribute_code" => "pattern",
+                                "value" => "1960"
+                            ],
+                            [
+                                "attribute_code" => "color",
+                                "value" => "45"
+                            ],
+                            [
+                                "attribute_code" => "size",
+                                "value" => "168"
+                            ]
                         ]
+*/
                     ]
                 ];
-                echo " product_as_json_string : ".json_encode($payload,JSON_PRETTY_PRINT);
+                echo " product_as_json_string : " . json_encode($payload, JSON_PRETTY_PRINT);
 
 //            dd(["skipping creation"]);
 
@@ -104,6 +106,9 @@ class Mage2PopulateProducts extends StoreAbstractCommand
                 dump([
                     "insert result" => $result
                 ]);
+
+//                break;
+            }
         }
 
 

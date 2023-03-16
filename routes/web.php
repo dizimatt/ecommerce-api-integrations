@@ -70,6 +70,18 @@ $router->group([
     ]);
 });
 $router->group([
+    'prefix' => '/shopify/admin/',
+    'namespace' => 'Shopify\Admin',
+    'middleware' => ['open-auth']
+], function() use ($router){
+    $router->get('/products', [
+        'uses' => 'ProductController@index',
+        'as' => 'shopify-admin-products'
+    ]);
+});
+
+
+$router->group([
     'prefix' => '/shopify/api',
     'namespace' => 'Shopify',
     'middleware' => ['open-auth']

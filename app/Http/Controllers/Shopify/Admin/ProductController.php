@@ -8,7 +8,7 @@ use App\Logger;
 use Monolog\Handler\StreamHandler;
 use App\Shopify\Models\ShopifyAppKey;
 
-class IndexController extends BaseController
+class ProductController extends BaseController
 {
     public function __construct()
     {
@@ -24,16 +24,14 @@ class IndexController extends BaseController
         );
         $logger->pushHandler(new StreamHandler($loggerFilename), Logger::INFO);
 
-//        $shopify_products = \App\Shopify\Models\ShopifyProduct::where('store_id',store()->id)->get();
-//        $bigcommerce_products = \App\BigCommerce\Models\BigCommerceProduct::where('store_id',store()->id)->get();
+        $shopify_products = \App\Shopify\Models\ShopifyProduct::where('store_id',store()->id)->get();
+        $bigcommerce_products = \App\BigCommerce\Models\BigCommerceProduct::where('store_id',store()->id)->get();
 
         $all_params = $request->all();
 
-            return view('shopify.admin.index', [
-                'hostname' => shopify()->getShop()['domain'],
-                'all_params' => $all_params
-//                'shopify_products' => $shopify_products,
-//                'bigcommerce_products' => $bigcommerce_products
+            return view('shopify.admin.products', [
+                'shopify_products' => $shopify_products,
+                'bigcommerce_products' => $bigcommerce_products
             ]);
 
     }
