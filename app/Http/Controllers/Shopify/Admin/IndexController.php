@@ -30,7 +30,7 @@ class IndexController extends BaseController
         $all_params = $request->all();
 
             return view('shopify.admin.index', [
-                'hostname' => shopify()->getShop()['domain'],
+                'shop' => $all_params['shop'],
                 'all_params' => $all_params
 //                'shopify_products' => $shopify_products,
 //                'bigcommerce_products' => $bigcommerce_products

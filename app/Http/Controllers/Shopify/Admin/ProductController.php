@@ -24,14 +24,10 @@ class ProductController extends BaseController
         );
         $logger->pushHandler(new StreamHandler($loggerFilename), Logger::INFO);
 
-        $shopify_products = \App\Shopify\Models\ShopifyProduct::where('store_id',store()->id)->get();
-        $bigcommerce_products = \App\BigCommerce\Models\BigCommerceProduct::where('store_id',store()->id)->get();
-
-        $all_params = $request->all();
+        $shopify_products = \App\Shopify\Models\ShopifyProduct::where('store_id',store()->id)->get()->toArray();
 
             return view('shopify.admin.products', [
-                'shopify_products' => $shopify_products,
-                'bigcommerce_products' => $bigcommerce_products
+                'shopify_products' => $shopify_products
             ]);
 
     }

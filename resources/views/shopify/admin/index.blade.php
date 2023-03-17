@@ -13,10 +13,24 @@
         <tr>
             <td>
                 <span>
-                    <form action="/shopify/admin/products" method="get" target="_blank">
-                        <input type="hidden" name="shop" value="{{$hostname}}" />
+                    <!--
+                    <form action="/shopify/admin/products" method="get">
+                        <input type="hidden" name="shop" value="{{$shop}}" />
                         <button type="submit">
                             Products
+                        </button>
+                    </form>
+                    -->
+                    <form action="/shopify/admin/config" method="get">
+                        <input type="hidden" name="shop" value="{{$shop}}" />
+                        <button type="submit">
+                            Config
+                        </button>
+                    </form>
+                    <form action="/shopify/admin/bcconfig" method="get">
+                        <input type="hidden" name="shop" value="{{$shop}}" />
+                        <button type="submit">
+                            Big Commerce Config
                         </button>
                     </form>
                 </span>

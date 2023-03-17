@@ -58,9 +58,9 @@ $router->group([
 });
 
 
-
+// the following shopify admin paths requires auth
 $router->group([
-    'prefix' => '/',
+    'prefix' => '/shopify/admin/',
     'namespace' => 'Shopify\Admin',
     'middleware' => ['shopify-admin-auth']
 ], function() use ($router){
@@ -77,6 +77,14 @@ $router->group([
     $router->get('/products', [
         'uses' => 'ProductController@index',
         'as' => 'shopify-admin-products'
+    ]);
+    $router->get('/config', [
+        'uses' => 'ConfigController@index',
+        'as' => 'shopify-admin-config'
+    ]);
+    $router->get('/bcconfig', [
+        'uses' => 'BCConfigController@index',
+        'as' => 'shopify-admin-bcconfig'
     ]);
 });
 
