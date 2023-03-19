@@ -21,14 +21,12 @@
                         </button>
                     </form>
                     -->
-                    <form action="/shopify/admin/config" method="get">
-                        <input type="hidden" name="shop" value="{{$shop}}" />
+                    <form action="https://{{$shop}}/apps/proxy/admin/config" method="get">
                         <button type="submit">
                             Config
                         </button>
                     </form>
-                    <form action="/shopify/admin/bcconfig" method="get">
-                        <input type="hidden" name="shop" value="{{$shop}}" />
+                    <form action="https://{{$shop}}/apps/proxy/admin/bcconfig" method="get">
                         <button type="submit">
                             Big Commerce Config
                         </button>

@@ -24,7 +24,6 @@ class OpenAuthenticate
 
             return response()->json($response, $errorCode);
         }
-
         if (!isset($getData['shop']) || empty($getData['shop'])) {
             $response = [];
 

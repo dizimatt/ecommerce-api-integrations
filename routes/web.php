@@ -68,6 +68,14 @@ $router->group([
         'uses' => 'IndexController@index',
         'as' => 'shopify-admin-index'
     ]);
+    $router->get('/config', [
+        'uses' => 'ConfigController@index',
+        'as' => 'shopify-admin-config'
+    ]);
+    $router->get('/bcconfig', [
+        'uses' => 'BCConfigController@index',
+        'as' => 'shopify-admin-bcconfig'
+    ]);
 });
 $router->group([
     'prefix' => '/shopify/admin/',
@@ -78,14 +86,7 @@ $router->group([
         'uses' => 'ProductController@index',
         'as' => 'shopify-admin-products'
     ]);
-    $router->get('/config', [
-        'uses' => 'ConfigController@index',
-        'as' => 'shopify-admin-config'
-    ]);
-    $router->get('/bcconfig', [
-        'uses' => 'BCConfigController@index',
-        'as' => 'shopify-admin-bcconfig'
-    ]);
+
 });
 
 

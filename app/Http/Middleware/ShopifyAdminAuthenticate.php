@@ -28,16 +28,24 @@ class ShopifyAdminAuthenticate
     private function checkHMAC($all_params){
         $store_id = 0;
         $logger = new Logger('ShopifyAdminAuthenticateHMAC');
+        $signature_type = false;
         $loggerFilename = storage_path(
             'logs/admin_authenticate.log'
         );
         $logger->pushHandler(new StreamHandler($loggerFilename), Logger::INFO);
 
+
         if (isset($all_params['hmac'])){
             $param_hmac = $all_params['hmac'];
             unset($all_params['hmac']);
         } else {
-            $param_hmac = "";
+            if (isset($all_params['signature'])) {
+                $signature_type = true;
+                $param_hmac = $all_params['signature'];
+                unset($all_params['signature']);
+            } else {
+                $param_hmac = "";
+            }
         }
 
         if (isset($all_params['shop'])){
@@ -54,26 +62,33 @@ class ShopifyAdminAuthenticate
         }
 
         foreach($all_params as $key=>$value){
+                $key = str_replace("%", "%25", $key);
+                $key = str_replace("&", "%26", $key);
+                $key = str_replace("=", "%3D", $key);
+                $value = str_replace("%", "%25", $value);
+                $value = str_replace("&", "%26", $value);
 
-            $key=str_replace("%","%25",$key);
-            $key=str_replace("&","%26",$key);
-            $key=str_replace("=","%3D",$key);
-            $value=str_replace("%","%25",$value);
-            $value=str_replace("&","%26",$value);
-
-            $ar[] = $key."=".$value;
+                $ar[] = $key . "=" . $value;
+                sort($ar);
         }
 
-        $str = join('&',$ar);
+        if (!$signature_type) {
+            $str = join('&', $ar);
+        } else {
+            // if it's a signature check, then we don't join with &
+            $str = join($ar);
+        }
 
-        $logger->info("hmac key",["store_api_secret" => $store_api_secret]);
+        $logger->info("hmac_info",[
+            "store_api_secret" => $store_api_secret,
+            "all_params_str" => $str
+            ]);
         $generated_hmac =  hash_hmac('sha256',$str,$store_api_secret,false);
-        /*
-        $logger->info("generated the hmac",[
-            "generated_hmac" => $generated_hmac
-        ]);
-        */
 
+        $logger->info("hmac comparisons",[
+            "generated_hmac" => $generated_hmac,
+            "param_hmac" => $param_hmac
+        ]);
         if ($generated_hmac === $param_hmac) {
             return $store_id;
         } else {
